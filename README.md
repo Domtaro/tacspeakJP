@@ -22,11 +22,11 @@ TacspeakJPは、日本語でTacspeakを使用できることを目標とし、�
 Original Tacspeak provides excellent response and high-accuracy recognition powered by modified Dragonfly and Kaldi Active Grammar.  
 But that only use for English recognition due to limitation of Kaldi engine.  
 
-TacspeakJP aim to use the Tackspeak with Japanese speeching. It solved by using 'WSR / SAPI 5' SR engine insteed of 'Kaldi'.  
+TacspeakJP aim to use the Tacspeak with Japanese speeching. It solved by using 'WSR / SAPI 5' SR engine insteed of 'Kaldi'.  
 I named 'JP' but, I guess it can works for any other languages what is supported by Windows Speech Recognition, with making grammar.  
 
 
-## オリジナル版との違い | Differences from original Tackspeak  
+## オリジナル版との違い | Differences from original Tacspeak  
 
 - 改変されていない [Dragonfly](https://github.com/dictation-toolbox/dragonfly) を使用  
   Running on the original (not modified) Dragonfly.  
@@ -56,7 +56,7 @@ I named 'JP' but, I guess it can works for any other languages what is supported
 
 ### ツールのダウンロードとインストール  
 1. [Microsoft Visual C++ 再頒布可能パッケージ](https://aka.ms/vs/17/release/vc_redist.x64.exe) をダウンロードし、インストールする  
-2. [TackspeakJPの最新バージョン](https://github.com/Domtaro/tacspeakJP/releases/latest/) をダウンロードする  
+2. [TacspeakJPの最新バージョン](https://github.com/Domtaro/tacspeakJP/releases/latest/) をダウンロードする  
 3. ダウンロードした.zipを任意の場所に解凍・配置する。  
 
 ### Windows音声認識のセットアップ  
