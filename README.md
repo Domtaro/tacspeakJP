@@ -1,15 +1,20 @@
-# Tacspeak
+# TacspeakJP
 
+<!--
 >**Fast, lightweight, modular - speech recognition for gaming**
 
 [![GithubDownloads](https://img.shields.io/github/downloads/jwebmeister/tacspeak/total?logo=github)](https://github.com/jwebmeister/tacspeak/releases) [![NexusmodsModPage](https://img.shields.io/badge/download-Nexus%20Mods-orange)](https://www.nexusmods.com/readyornot/mods/3159) [![Discord](https://img.shields.io/discord/1183400761372180610?logo=discord)](https://discord.gg/QfMV2J8SgP)
 
 [![Donate](https://img.shields.io/badge/donate-GitHub-pink.svg)](https://github.com/sponsors/jwebmeister) [![Donate](https://img.shields.io/badge/donate-PayPal-green.svg)](https://paypal.me/jwebmeister)
+-->
 
+## はじめに | Introduction
 
-## Introduction
+「TacspeakJP」は、jwebmeister氏制作のFPS向け音声コマンディングツール「Tacspeak」を、日本語音声入力に対応するように修正したものです。
 
-Tacspeak has been designed specifically for **recognising speech commands while playing games**, particularly system resource and FPS hungry games!
+TacspeakJP is modified edition of Tacspeak tool created by jwebmeister. It provide Japanese language speach recognition.
+
+<!--
 
 **Fast** - typically on the order of 10-50ms, from detected speech end (VAD) to action.
 
@@ -276,3 +281,5 @@ This project is licensed under the GNU Affero General Public License v3 (AGPL-3.
 
 - Based upon and may include code from "Dragonfly" [dictation-toolbox/dragonfly](https://github.com/dictation-toolbox/dragonfly), under the LGPL-3.0 license.
 - Based upon and may include code from "Kaldi Active Grammar" [daanzu/kaldi-active-grammar](https://github.com/daanzu/kaldi-active-grammar), under the AGPL-3.0 license.
+
+-->
