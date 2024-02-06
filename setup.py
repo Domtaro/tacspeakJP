@@ -1,6 +1,6 @@
 #
-# This file is part of Tacspeak.
-# (c) Copyright 2023-2024 by Joshua Webb
+# This file is part of TacspeakJP.
+# (c) Copyright 2024 by Domtaro
 # Licensed under the AGPL-3.0; see LICENSE.txt file.
 #
 
@@ -62,27 +62,27 @@ def grammar_modules():
     return src_dst_dirs
 
 include_files = []
-include_files.extend(collect_dist_info("webrtcvad_wheels"))
+# include_files.extend(collect_dist_info("webrtcvad_wheels"))
 include_files.extend(grammar_modules())
 include_files.append(("tacspeak/user_settings.py", "tacspeak/user_settings.py"))
 include_files.append("README.md")
 include_files.append("LICENSE.txt")
 include_files.append(("licenses/pkg_licenses_notices.txt", "licenses/pkg_licenses_notices.txt"))
 include_files.append(("licenses/pkg_licenses_summary.md", "licenses/pkg_licenses_summary.md"))
-include_files.append(("licenses/portaudio_license.txt", "licenses/portaudio_license.txt"))
-include_files.append("kaldi_model/")
-include_files.append(("kaldi_model/README.md", "kaldi_model/README.md"))
-include_files.append(("kaldi_model/user_lexicon.txt", "kaldi_model/user_lexicon.txt"))
-include_files.append(("scripts/download_extract_model.ps1", "scripts/download_extract_model.ps1"))
-include_files.append(("scripts/move_extracted_model.ps1", "scripts/move_extracted_model.ps1"))
-include_files.append(("scripts/compile_dictation_graph.ps1", "scripts/compile_dictation_graph.ps1"))
-include_files.append(("scripts/list_retain_item_missing_wav.ps1", "scripts/list_retain_item_missing_wav.ps1"))
-include_files.append(("scripts/delete_retain_item_missing_wav.ps1", "scripts/delete_retain_item_missing_wav.ps1"))
-include_files.append(("scripts/list_wav_missing_from_retain_tsv.ps1", "scripts/list_wav_missing_from_retain_tsv.ps1"))
-include_files.append(("scripts/delete_wav_missing_from_retain_tsv.ps1", "scripts/delete_wav_missing_from_retain_tsv.ps1"))
-include_files.append(("scripts/copy_retain_item_cmds_only.ps1", "scripts/copy_retain_item_cmds_only.ps1"))
-include_files.append(("scripts/sum_wav_length.ps1", "scripts/sum_wav_length.ps1"))
-include_files.append(("retain/README.md", "retain/README.md"))
+# include_files.append(("licenses/portaudio_license.txt", "licenses/portaudio_license.txt"))
+# include_files.append("kaldi_model/")
+# include_files.append(("kaldi_model/README.md", "kaldi_model/README.md"))
+# include_files.append(("kaldi_model/user_lexicon.txt", "kaldi_model/user_lexicon.txt"))
+# include_files.append(("scripts/download_extract_model.ps1", "scripts/download_extract_model.ps1"))
+# include_files.append(("scripts/move_extracted_model.ps1", "scripts/move_extracted_model.ps1"))
+# include_files.append(("scripts/compile_dictation_graph.ps1", "scripts/compile_dictation_graph.ps1"))
+# include_files.append(("scripts/list_retain_item_missing_wav.ps1", "scripts/list_retain_item_missing_wav.ps1"))
+# include_files.append(("scripts/delete_retain_item_missing_wav.ps1", "scripts/delete_retain_item_missing_wav.ps1"))
+# include_files.append(("scripts/list_wav_missing_from_retain_tsv.ps1", "scripts/list_wav_missing_from_retain_tsv.ps1"))
+# include_files.append(("scripts/delete_wav_missing_from_retain_tsv.ps1", "scripts/delete_wav_missing_from_retain_tsv.ps1"))
+# include_files.append(("scripts/copy_retain_item_cmds_only.ps1", "scripts/copy_retain_item_cmds_only.ps1"))
+# include_files.append(("scripts/sum_wav_length.ps1", "scripts/sum_wav_length.ps1"))
+# include_files.append(("retain/README.md", "retain/README.md"))
 
 # Dependencies are automatically detected, but it might need fine tuning.
 build_exe_options = {
@@ -91,24 +91,24 @@ build_exe_options = {
     "bin_path_excludes": "C:/Program Files/",
     "excludes": ["tkinter", 
                  "sqlite3",
-                 # "asyncio",
+                 "asyncio",
                  # "collections",
-                 # "concurrent",
-                 # "email",
+                 "concurrent",
+                 "email",
                  # "encodings",
-                 # "html",
-                 # "http",
+                 "html",
+                 "http",
                  # "json",
                  # "lib2to3",
                  # "logging",
                  # "multiprocessing",
-                 # "pydoc_data",
+                 "pydoc_data",
                  # "pywin",
                  "pip-licenses",
                  "prettytable",
                  # "re",
-                 # "test",
-                 # "unittest",
+                 "test",
+                 "unittest",
                  # "urllib",
                  # "xml",
                  # "xmlrpc",
@@ -117,12 +117,12 @@ build_exe_options = {
 }
 
 setup(
-    name="tacspeak",
+    name="tacspeakJP",
     version=get_version(),
-    description="tacspeak",
+    description="tacspeakJP",
     options={"build_exe": build_exe_options},
     executables=[Executable(script="cli.py", 
-                            target_name="tacspeak", 
-                            copyright="© Copyright 2023-2024 by Joshua Webb"
+                            target_name="tacspeakJP", 
+                            copyright="© Copyright 2024 by Domtaro"
                             )],
 )

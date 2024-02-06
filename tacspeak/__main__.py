@@ -1,6 +1,6 @@
 #
-# This file is part of Tacspeak.
-# (c) Copyright 2023 by Joshua Webb
+# This file is part of TacspeakJP.
+# (c) Copyright 2024 by Domtaro
 # Licensed under the AGPL-3.0; see LICENSE.txt file.
 #
 
@@ -39,36 +39,10 @@ def main():
         print("Failed to load `tacspeak/user_settings.py` DEBUG_HEAVY_DUMP_GRAMMAR. Using default settings as fallback.")
         DEBUG_HEAVY_DUMP_GRAMMAR = False
     try:
-        KALDI_ENGINE_SETTINGS = (sys.modules["user_settings"]).KALDI_ENGINE_SETTINGS
+        WSR_AUDIO_SOURCE_INDEX = (sys.modules["user_settings"]).WSR_AUDIO_SOURCE_INDEX
     except Exception:
-        print("Failed to load `tacspeak/user_settings.py` KALDI_ENGINE_SETTINGS. Using default settings as fallback.")
-        KALDI_ENGINE_SETTINGS = {
-            "listen_key":0x10, # 0x10=SHIFT key, 0x05=X1 mouse button, 0x06=X2 mouse button, see https://learn.microsoft.com/en-us/windows/win32/inputdev/virtual-key-codes
-            "listen_key_toggle":0, # 0 for toggle mode off; 1 for toggle mode on; 2 for global toggle on (use VAD); -1 for toggle mode off but allow priority grammar even when key not pressed
-            "vad_padding_end_ms":250, # ms of required silence after VAD
-            "auto_add_to_user_lexicon":False, # this requires g2p_en (which isn't installed by default)
-            "allow_online_pronunciations":False,
-            # "input_device_index":None, # set to an int to choose a non-default microphone
-            # "vad_aggressiveness":3, # default aggressiveness of VAD
-            # "vad_padding_start_ms":150, # default ms of required silence before VAD
-            # "model_dir":'kaldi_model', # default model directory
-            # "tmp_dir":None, 
-            # "audio_input_device":None, 
-            # "audio_self_threaded":True, 
-            # "audio_auto_reconnect":True, 
-            # "audio_reconnect_callback":None,
-            # "retain_dir":None, # set to a writable directory path to retain recognition metadata and/or audio data
-            # "retain_audio":None, # set to True to retain speech data wave files in the retain_dir (if set)
-            # "retain_metadata":None, 
-            # "retain_approval_func":None,
-            # "vad_complex_padding_end_ms":600, # default ms of required silence after VAD for complex utterances
-            # "lazy_compilation":True, # set to True to parallelize & speed up loading
-            # "invalidate_cache":False,
-            # "expected_error_rate_threshold":None,
-            # "alternative_dictation":None,
-            # "compiler_init_config":None, 
-            # "decoder_init_config":None,
-        }
+        print("Failed to load `tacspeak/user_settings.py` WSR_AUDIO_SOURCE_INDEX. Using default settings as fallback.")
+        WSR_AUDIO_SOURCE_INDEX = 0
 
     def log_handlers():
         log_file_path = os.path.join(os.getcwd(), ".tacspeak.log")
@@ -100,19 +74,18 @@ def main():
         logging.getLogger('grammar.begin').setLevel(20)
         logging.getLogger('compound').setLevel(20)
         logging.getLogger('engine').setLevel(15)
-        logging.getLogger('kaldi').setLevel(15)
-        logging.getLogger('kaldi.compiler').setLevel(15)
-        logging.getLogger('kaldi.wrapper').setLevel(15)
         logging.getLogger('action.exec').setLevel(10)
     else:
         setup_loggers()
 
     # Set any configuration options here as keyword arguments.
-    # See Kaldi engine documentation for all available options and more info.
-    engine = get_engine('kaldi',**KALDI_ENGINE_SETTINGS)
+    engine = get_engine('sapi5inproc')
 
     # Call connect() now that the engine configuration is set.
     engine.connect()
+
+    # set audio source.
+    engine.select_audio_source(WSR_AUDIO_SOURCE_INDEX)
 
     # Load grammars.
     grammar_path = os.path.join(os.getcwd(), os.path.relpath("tacspeak/grammar/"))
@@ -129,9 +102,8 @@ def main():
     def on_begin():
         pass
 
-    def on_recognition(words, results):
-        message = f"{results.kaldi_rule} | {' '.join(words)}"
-        log_recognition.log(20, message)
+    def on_recognition(words):
+        log_recognition.log(20, words)
 
     def on_failure():
         pass
@@ -140,11 +112,11 @@ def main():
         pass
 
     # Start the engine's main recognition loop
-    engine.prepare_for_recognition()
     try:
         print("Ready to listen...")
         engine.do_recognition(on_begin, on_recognition, on_failure, on_end)
     except KeyboardInterrupt:
+        print("exit")
         pass
 
     # Disconnect from the engine, freeing its resources.

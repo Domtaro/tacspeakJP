@@ -1,277 +1,232 @@
 # TacspeakJP
 
-<!--
->**Fast, lightweight, modular - speech recognition for gaming**
-
-[![GithubDownloads](https://img.shields.io/github/downloads/jwebmeister/tacspeak/total?logo=github)](https://github.com/jwebmeister/tacspeak/releases) [![NexusmodsModPage](https://img.shields.io/badge/download-Nexus%20Mods-orange)](https://www.nexusmods.com/readyornot/mods/3159) [![Discord](https://img.shields.io/discord/1183400761372180610?logo=discord)](https://discord.gg/QfMV2J8SgP)
-
-[![Donate](https://img.shields.io/badge/donate-GitHub-pink.svg)](https://github.com/sponsors/jwebmeister) [![Donate](https://img.shields.io/badge/donate-PayPal-green.svg)](https://paypal.me/jwebmeister)
--->
+>**日本語音声入力コマンディングツール**
 
 ## はじめに | Introduction
 
-「TacspeakJP」は、jwebmeister氏制作のFPS向け音声コマンディングツール「Tacspeak」を、日本語音声入力に対応するように修正したものです。
+「TacspeakJP」は、jwebmeister氏制作のゲーム向け音声コマンディングツール「Tacspeak」を、日本語音声入力に対応するように改修したものです。
 
-TacspeakJP is modified edition of Tacspeak tool created by jwebmeister. It provide Japanese language speach recognition.
-
+'TacspeakJP' is modified edition of 'Tacspeak' tool created by jwebmeister. It provide Japanese language speach recognition.
 <!--
-
-**Fast** - typically on the order of 10-50ms, from detected speech end (VAD) to action.
-
-**Lightweight** - it runs on CPU, with ~2GB RAM.
-
-**Modular** - you can build your own set of voice commands for additional games, or modify [existing ones](tacspeak/grammar).
-
-**Open source** - you can modify any part of Tacspeak for yourself, and/or contribute back to the project and help build it as part of the community.
-
-[![Watch the video demo of me using Tacspeak while playing Ready or Not](https://img.youtube.com/vi/qBL0bCt_VMo/maxresdefault.jpg)](https://youtu.be/qBL0bCt_VMo)
-
+[![Ready or Notで使用するデモプレイ](https://img.youtube.com/vi/qBL0bCt_VMo/maxresdefault.jpg)](https://youtu.be/qBL0bCt_VMo)
+-->
 ---
 
-Tacspeak is built atop the excellent [Dragonfly](https://github.com/dictation-toolbox/dragonfly) speech recognition framework for Python. 
-- Note: Tacspeak uses a *modified version* of Dragonfly located at [jwebmeister/dragonfly](https://github.com/jwebmeister/dragonfly).
-- Please see the Dragonfly [docs](http://dragonfly.readthedocs.org/en/latest/) for information on building grammars and rules (i.e. voice commands). 
-- Please also see the existing [examples](tacspeak/grammar) of Tacspeak grammar modules.
+オリジナルのTacspeakは、カスタマイズされた [jwebmeister/dragonfly](https://github.com/jwebmeister/dragonfly) 音声認識フレームワークと、 動的デコードを実現する [Kaldi Active Grammar](https://github.com/daanzu/kaldi-active-grammar/) エンジンによって、優れた認識精度や応答性を実現しています。
+一方で、Kaldiエンジンを使用する都合上、英語での音声認識しか利用できないという制限があります。
 
-Also built atop the excellent [Kaldi Active Grammar](https://github.com/daanzu/kaldi-active-grammar/), which provides the [Kaldi](https://github.com/kaldi-asr/kaldi) (also excellent) engine backend and model for Dragonfly.
+TacspeakJPは、日本語でTacspeakを使用できることを目標とし、使用する音声認識エンジンを'Kaldi'から'WSR / SAPI 5' (Windows Speech Recognition / Microsoft’s Speech API version 5)へと変更する改修を行いました。
+'JP'と銘打っていますが、理論上、Windows音声認識で利用できる言語であればgrammarを用意すれば日本語以外でも動作可能なはずです。
 
-## Requirements
+Original Tacspeak provides excellent response and high-accuracy recognition powered use modified Dragonfly and Kaldi Active Grammar.
+But that only use for English recognition due to limitation of Kaldi engine.
 
-- OS: Windows 10/11, 64-bit
-- ~2GB+ disk space for model plus temporary storage and cache.
-- ~2GB+ RAM.
-- Only supports English language speech recognition, as provided via [Kaldi Active Grammar](https://github.com/daanzu/kaldi-active-grammar).
+TacspeakJP aim to use the Tackspeak with Japanese speeching. It solved by using SR engine to 'WSR / SAPI 5' insteed of 'Kaldi'.
+I named 'JP' but, I guess it can works for any other languages what is supported by Windows Speech Recognition, with making grammar.
 
-## Basic install - packaged executable
+## オリジナル版との違い | Differences from original Tackspeak
 
-[![Watch the video demo of me downloading and install Tacspeak](https://img.youtube.com/vi/P405ucc2wP4/maxresdefault.jpg)](https://youtu.be/P405ucc2wP4)
+- 改変されていない [Dragonfly](https://github.com/dictation-toolbox/dragonfly) を使用
+  Running on the original (not modified) Dragonfly.
+- 'Kaldi'エンジンの代わりに'WSR / SAPI 5'エンジンを使用
+  Running on the 'WSR / SAPI 5' engine insteed 'Kaldi'
+- 日本語用に編集したReady or Not向けgrammarを同梱
+  Includes grammar edited for Japanese language, to use on Ready or Not.
+- エンジン変更により、次の機能は使用できません。
+  Below features is omitted due to change the engine.
+    - 発話中の割込み認識（エールの優先認識） | Mid-utterance recognition(for yell)
+    - 実行中のキー操作による認識中断／再開（常にオン） | Toggle of recognition on/off(always on)
+    - その他 user_setting.py の KALDI_ENGINE_SETTINGS で設定されていた機能 | and the other options in KALDI_ENGINE_SETTINGS on user_setting.py
+- 認識精度はWindows音声認識の精度に依存します。これはトレーニングによって向上されます。
+  Accuracy of recognition depends on Windows Speech Recognition. It can be improved by training.
+- Windows音声認識の'音声辞書'機能により、特定の単語の認識精度を高めることができます。
+  And also can improve recognition of specific words, by using 'Speech Dictionary' within WSR.
 
-1. Download and install [Microsoft Visual C++ Redistributable](https://aka.ms/vs/17/release/vc_redist.x64.exe)
-2. Download the [latest release](https://github.com/jwebmeister/tacspeak/releases/latest/), including both (they are separate downloads and/or releases):
-    - the Tacspeak application .zip (includes .exe)
-    - a pre-trained Kaldi model .zip (includes kaldi_model folder).
-3. Extract the Tacspeak application .zip into a folder, and extract the Kaldi model .zip into the same folder. Check the following files exists:
-    - `./tacspeak.exe`
-    - `./tacspeak/user_settings.py`
-    - `./tacspeak/grammar/_readyornot.py`
-    - `./kaldi_model/Dictation.fst` - if not you need to download and extract the pre-trained model
-4. Run the executable `Tacspeak/tacspeak.exe` :)
+## 要件 | Requirements
 
-## Usage
-### Basic
+- OS: Windows 10/11, 64-bit （Windows 11での動作は未確認 | Windows 11 is not tested yet）
+- Microsoft Visual C++ 再頒布可能パッケージ | Microsoft Visual C++ Redistributable Package
+- Windows音声認識のセットアップ・設定 | Setup for Windows Speech Recognition
 
-[![Watch the video Tacspeak getting starting guide how to use & change settings (basic)](https://img.youtube.com/vi/KnYrxzThG-E/maxresdefault.jpg)](https://youtu.be/KnYrxzThG-E)
+## 導入 | Installation (in Japanese only)
 
-Run `tacspeak.exe` (or `python ./cli.py`) and it will...
-- load `./tacspeak/user_settings.py`
-- load all modules `./tacspeak/grammar/_*.py`
-- start the speech engine
-- begin listening for commands, but it will...
-    - wait for a matching app context (defined in the `grammar` modules), then activate those relevant modules.
-    - wait for the `listen_key` to be activated if it's specified, and depending on `listen_key_toggle` (toggle mode).
+### ツールのダウンロードとインストール
+1. [Microsoft Visual C++ 再頒布可能パッケージ](https://aka.ms/vs/17/release/vc_redist.x64.exe) をダウンロードし、インストールする
+2. [TackspeakJPの最新バージョン](https://github.com/Domtaro/tacspeakJP/releases/latest/) をダウンロードする
+3. ダウンロードした.zipを任意の場所に解凍・配置する。
 
-Also:
-- You may need to **"Run as administrator"** `tacspeak.exe`
-- Review and adjust  `./tacspeak/user_settings.py` to your liking. 
-    - see example [./tacspeak/user_settings.py](tacspeak/user_settings.py)
-- Review and adjust any module settings in `./tacspeak/grammar/_*.py`, e.g. keybindings. 
-    - see example [./tacspeak/grammar/_readyornot.py](tacspeak/grammar/_readyornot.py)
-- (Note: you will need to restart Tacspeak for changes to take effect.)
-- [Tacspeak - Ready or Not commands list](https://docs.google.com/spreadsheets/d/1jpuR8JHmh0LOOcUQ7JMMzDOmSYYe2uMpy63X238ZySs/edit?usp=sharing) (imperfect, outdated, not maintained, but maybe useful)
+### Windows音声認識のセットアップ
+1. 次のいずれかでコントロールパネルを開く
+    - Win+R → "control" と入力してEnter
+    - スタート → Windowsシステムツール から開く
+2. 「音声認識」をクリック（表示されない場合は 表示方法を"小さいアイコン"に変更）
+3. 「音声認識の開始」をクリック
+    - 初回であればセットアップが始まるので、画面の指示に従う。
+4. （任意・推奨）「コンピューターをトレーニングして認識精度を向上させる」をクリック
+    - 何回も実行でき、毎回違う内容を読み上げさせられる。２回ほどやっておくとよいと思われる。
+5. （任意・推奨）「音声辞書」に単語を登録する
+    - 「音声認識の開始」をクリックするして音声認識のGUIを表示
+    - 画面上部のマイクアイコン または タスクバーのマイクアイコンを右クリック → 音声辞書を開く
+    - "おぷてぃわんど"や"はじょうつい"などの特別な単語を登録する（後述のgrammar設定のために、ひらがなで登録することを推奨します）
+    - 「完了時に発音を録音する」をチェックして自分の発音を登録することで、さらに認識精度を高められる。
+6. （任意）「高度な音声オプション」をクリック
+    - 「音声認識」タブの下部、「マイク」-「詳細設定」で使用するマイクを指定できる。後述のツール側オプションでも指定可能。
 
-### Important advisory
+### ツールのセットアップ・実行
+1. user_settings.py の内容を確認・編集する
+    - WSR_AUDIO_SOURCE_INDEX で使用するマイクを指定できる。どのマイクが何番のインデックスかは、「tacspeakJP.exe --get_audio_sources」を実行することで確認できる
+2. grammar の内容を確認・編集する（Ready or Notの場合、デフォルト用として tacspeak/grammar/_readyornot_jp.py を同梱）
+    - grammar_context にフックするゲームのexeのパス（の一部）を指定する（case-insensitive）
+    - ingame_key_bindings にゲームの自分のキーバインド設定を反映する
+    - 'map_' で始まる変数に、追加／変更したい言葉があれば反映する
+    - 'spec' という変数に、追加／変更したい文法（言い回し）があれば反映する
+    - 'YellFreeze' クラスに、エール（シャウト、降伏呼びかけ）の言葉を好みに応じて追加／変更する
+    - そのほか、[Dragonflyのドキュメント](https://dragonfly2.readthedocs.io/en/latest/rules.html) などを参考に、自分用のルールを追加できる
+3. tacspeak.exe を実行する（ツールとゲームの起動はどちらが先でも構いません。）
+4. 「ビギニングループ」という音声が聞こえて、"Ready to listen..." の表示で待機したら起動しています。ゲームを起動して使用してみてください
+    - マイクに喋ると、認識された音声が文字で表示されます。誤認識のチェックなどができます
+    - 起動時の「ビギニングループ」の音声は、Dragonfly標準部分で再生されているので設定等でオフにはできません。音量ミキサーでアプリの音量を0にすれば聞こえなくなるかもしれません
+5. Ctrl+C または 右上×で終了する
 
-*Please use caution and your own discretion when installing or using any third-party files, specifically \*.py files. Don't install or use files from untrustworthy sources.*
+**注意！** 
+'./tacspeak/user_settings.py' と './tacspeak/grammar/_*.py' は自動で読み込まれます。
+信用できない第三者のファイルが混入し実行されないように注意してください。
 
-Tacspeak automatically loads (and executes) `./tacspeak/user_settings.py` and all modules `./tacspeak/grammar/_*.py`, regardless of what code it contains.
+## 基本的な使い方（Ready or Notで説明） | Basic usage (in Japanese only)
 
-### User settings
+- 言葉をしゃべり、コマンドが成立した場合、「current team go stack up split」のように認識されたコマンドが表示され、キー入力が行われます。
+- 言い回しの例（付属の_readyornot_jp.pyの内容）を以下に示します。
+### コマンドのサンプル
+- うごくな
+  → Freeze!
+- て を あげろ
+  → Freeze!
+- しゅうごう しろ
+  → Fall in
+- にれつ で うしろ に つけ
+  → Fall in, double file
+- だいやもんど たいけい で さいへんせい
+  → Fall in, diamond formation
+- はいち に つけ
+  → Stack up split
+- みぎ に てんかい
+  → Stack up on the right
+- すきゃん しろ
+  → Scan the door
+- みらー を つかえ
+　→ Use the mirror
+- ぴっきんぐ しろ
+  → Pick the door
+- ぶろっく しろ
+  → Use the wedge
+- あけて とつにゅう しろ
+  → Open and clear
+- しょっとがん で あけて ふらっしゅ で くりあ しろ
+  → Shotgun, flash and clear
+- あけたら がす を なげて せいあつ しろ
+  → Leader, CS and clear
+- あいず で はいれ、 くりありんぐ しろ
+  → On my mark, move in and clear
+- いけ いけ いけ
+  → Execute
+- がす を つかえ
+  → Deploy CS
+- うしろ を むけ
+  → You, Turn around
+- こっち に こい
+  → You, Move my position
+- そこ で とまれ
+  → You, stop
+-  こうそく しろ
+  → restrain
+-  あいつ に てーざー を つかえ
+  → Deploy teaser
+-  そうさく しろ
+  → Search and secure
 
-It is highly recommended to review and adjust  [./tacspeak/user_settings.py](tacspeak/user_settings.py) to your liking.
+## トラブルシューティング | Troubleshooting (in Japanese only)
 
-Open `./tacspeak/user_settings.py` in a text editor, change the settings, then save and overwrite the file.  There are comments in the file explaining most of the important settings.
+- 言葉がうまく認識されない
+    - Windows音声認識のトレーニングを実行してみてください。
+    - 一般的でない単語（ミラーガンなど）については音声辞書に登録してください。
+    - 「ひらけ　ふらっしゅで　くりあ　しろ」のように、言葉の区切りに意識的に間を持たせてみてください。
+    - 普段よりはっきり発音することを意識してみて下さい。
+    - マイクの感度が高い場合、周囲の雑音が影響することも考えられます。可能な限りマイク感度を下げ、空調などの雑音を減らしてください。
+- 言葉は正しいのにコマンドが発動しない
+    - 正しい位置をポイントしていることを確認してください。（ドアのコマンドならドアをポイントしていること）
+      ツール側では、「いまどこを見ているか」を判別しません。
+    - 複数の場面に同じ言葉の並びを設定するとうまくいかない場合があります。
+      例えば、単に「とまれ」とだけ言うと、チームへの停止命令か、動いている民間人への命令か特定できません。
+      どちらかのコマンドに、「そこで とまれ」のように言葉を加えてたりして区別できるようにしてみて下さい。
+    - 見かけ上は同じ「しゅうごう」でも、どうやら内部的に違いがあってコマンド発動に影響する場合があるようです。
+      WSRの仕様を把握しきれていないため詳細不明です。
+      「しゅうごう しろ」のように他の言葉と一緒に言うと改善する場合があります。
+    - 実際にキー入力で実行できないコマンドは動作しません
+      例えば、一部のドアで「左にスタック」が無効になっていたりするなど
+- 認識されるのが遅い
+    - Kaldiエンジンに比べると反応が遅いかもしれません。現状、Windows音声認識を使うことによる限界があります。
+    - エール（手を挙げろ！など）のように素早く発動することが重要なコマンドは、そもそも不向きです。
+      現実で言葉を言い終わってからコマンドを発動するという仕組み上、発動できる早さに限界があります。
+      これはKaldi Active Grammarで応答性を増した本家Tacspeakであっても同様です。
+      咄嗟のエールなどは最初の１回はキー入力で出すことをお勧めします。
+- そのほかの制限
+    - 視線の手前と奥に二つドアがある場合、どちらのドアへの指示かの選択が最初に追加されますが、付属のgrammarではそのパターンに対応していません。
+      あなたの手で改良すれば対応可能かもしれません。
+      本家Tacspeakでその話題の議論があったはずなので参考にするとよいかもしれません。
 
-For example, you might want to change these:
-- `listen_key`=`0x05` 
-    - `0x05` = mouse thumb button 1.
-    - `0x10` = Shift key.
-    - See [here](https://learn.microsoft.com/en-us/windows/win32/inputdev/virtual-key-codes) for more info.
-    - `None` = overrides `listen_key_toggle`, and sets it into always listening mode; uses Voice Activity Detector (VAD) to detect end of speech and recognise commands.
-- `listen_key_toggle`=`-1` 
-    - Recommended is `0` or `-1`. 
-    - `0` for toggle mode off, listen only while key is pressed; must release key for the command to be recognised.
-    - `1` for toggle mode on, key press toggles listening on/off; must toggle off for the command to be recognised.
-    - `2` for global toggle mode on, key press toggles listening on/off, but it uses Voice Activity Detector (VAD) to detect end of speech and recognise commands so you don't have to toggle off to recognise commands.
-    - `-1` for toggle mode off + priority, listen only while key is pressed, except always listen for priority grammar ("freeze!") even when key is not pressed.
-- `listen_key_padding_end_ms_min`=`1`
-    - recommended is `1` if using `listen_key_toggle` `0` or `-1`; set to `0` for anything else.
-    - min ms of audio captured after `listen_key` is released (or toggled off), after which if VAD detects silence it will stop capturing.
-- `listen_key_padding_end_ms_max`=`170`
-    - recommended is `170` if using `listen_key_toggle` `0` or `-1`; set to `0` for anything else.
-    - max ms of audio captured after `listen_key` is released (or toggled off), but will stop short if VAD detects silence.
-- `listen_key_padding_end_always_max`=`False`
-    - disregard VAD and always capture `listen_key_padding_end_ms_max` of audio after `listen_key` is released (or toggled off)
-- `vad_padding_end_ms`=`250`
-    - recommended is `150` if using `listen_key_toggle` `0` or `-1`; set to `250` for anything else.
-    - ms of required silence after VAD.
-    - change this if you use VAD and find it's too quick or slow to identify the figure out you've stopped speaking and that it should try to recognise the command.
-- `audio_input_device`=`None`
-    - should use default microphone (as set within Windows Sound Settings), but should be able to change the index (number) to select a different input device.
-- `USE_NOISE_SINK`=`True`
-    - load NoiseSink rule(s), if it's setup in the grammar module - it should *partially* capture other noises and words outside of other rules, and do nothing. Set to `False` if you're having issues with recognition accuracy.
-- `retain_dir`= `./retain/`
-    - use this setting to retain recordings of recognised commands - set to a writeable directory to retain recognition metadata and/or audio data. Disabled by default.
-- `retain_audio`= `True`
-    - use this setting to retain recordings of recognised commands - set to True to retain speech data wave files in the `retain_dir`. Disabled by default.
-- `retain_metadata`= `True`
-    - use this setting to retain recordings of recognised commands - set to True to retain metadata of recognitions in a `.tsv` file in `retain_dir`. Disabled by default.
-- `retain_approval_func`= `my_retain_func`
-    - use this setting to retain recordings of recognised commands - set to a function returning `True` or `False` based on `AudioStoreEntry` contents. Disabled by default.
+## （開発者向け）ビルド方法 | How to build (for deveropper, in Japanese only)
 
-### Grammar modules
+編集中です。すみません。
+以下はメモ。
 
-It is likely you will want to modify or customise some of the [existing Tacspeak grammar modules](tacspeak/grammar) (if not also add your own!), which you can do by editing the `./tacspeak/grammar/_*.py` file corresponding to the application you're interested in.  
+- Python 3.11 が必須（3.12不可）
+- freeze.txt の内容が前提パッケージ
+- win32comのためにVisual Studio（コミュニティ版で可）のインストールが必要
+    - Python 開発 - Python ネイティブ開発ツール をチェック
+      他にもあったかもしれないけど忘れた
+- ビルド手順
+    - setup.pyのディレクトリでpowershellを開く
+    - py -m venv "./.venv"
+    - ./.venv/Scripts/activate
+    - (.venv)に切り替わっていること
+    - py -m pip install -r requirements.txt
+    - py setup.py build
 
-As an example, in the [Ready or Not module](tacspeak/grammar/_readyornot.py) you can change `ingame_key_bindings` to align the Tacspeak module with your in-game keybindings.  
-You could also change the words and/or sentences used for recognising speech commands, for example, adding "smoke it out" as an alternative to "breach and clear".
+## モチベーション | Motivation
 
-Additional notes:
-- Please see the existing [examples](tacspeak/grammar) of Tacspeak grammar modules.
-- Please see the Dragonfly [docs](http://dragonfly.readthedocs.org/en/latest/) for information on building grammars, rules, and actions (i.e. voice commands). 
-- Note: Tacspeak uses a *modified version* of Dragonfly located at [jwebmeister/dragonfly](https://github.com/jwebmeister/dragonfly). Review the source and/or commits of the fork to understand its differences to the original project and the corresponding docs.
+'Tacspeak'は、他にはないゲーム体験を提供してくれる素晴らしいツールです。しかし日本ではネイティブな英語発音に親しみづらい人も少なくなく、言語の壁で対象ユーザーが限られてしまうことをとても残念に感じました。
+そこで、より多くのユーザーにTacspeakの魅力を届けたいという思いから、日本語入力を取り扱うことができないか検討してみました。
 
-### Models
+結果として、DragonflyがWSRをハンドルできることが分かったため、比較的少ない変更で実装できました。
+元々DragonflyやTacspeak自体がシンプルかつコンパクトな実装であったことにも助けられました。
 
-See [kaldi_model/README.md](kaldi_model/README.md) for more information.
+改めて、オリジナルTacspeak制作者のjwebmeister氏に感謝と敬意を表します。
 
-## Troubleshooting
+'Tacspeak' is an amazing tool that provides a unique gaming experience. However, in Japan, many people does not familiarized them with native English pronaunciation.
+Therefore, I tryed whether it would be possible to handle Japanese speech input to bring the experiences of Tacspeak to many users as possible.
 
-Things to check or try first:
-- Is [Microsoft Visual C++ Redistributable](https://aka.ms/vs/17/release/vc_redist.x64.exe) installed?
-- Have the Tacspeak application and model files been extracted into the correct locations? Check the following files exists:
-    - `./tacspeak.exe`
-    - `./tacspeak/user_settings.py`
-    - `./tacspeak/grammar/_readyornot.py`
-    - `./kaldi_model/Dictation.fst` - if not you need to download and extract the pre-trained model
-- Have you tried "Run as administrator" on `tacspeak.exe`?
-- Is the correct microphone set as the default in Windows Sound Settings?
-- Are you pressing the `listen_key` (by default it is mouse thumb button), and does it show "Hot mic" in the console?
-- Are you running ReadyOrNot and have the window focused (i.e. you're not alt-tabbed to another window)?
-- Are you pressing the `listen_key` (default is mouse thumb button), speaking, then releasing after you finish speaking?
-- Check the key bindings in `./tacspeak/grammar/_readyornot.py`. It's set for default game keybindings.
-- Check the ".tacspeak.log" file for any useful error messages to narrow it down.
-- Try reinstalling (extracting from .zips) everything, including the model, don't change anything in `./tacspeak/user_settings.py` or `./tacspeak/grammar/_readyornot.py` keep it all default, try running `tacspeak.exe`.
-- For Tacspeak version ≥0.1.1, run `./tacspeak.exe --print_mic_list` in Powershell or command prompt. 
-    - This will list all of the audio devices found on your system, and can be useful for figuring out the correct index number for the `audio_input_device` setting in `./tacspeak/user_settings.py`. 
-    - A far easier option to try first is to set the correct default recording device in Windows Sound Settings.
-- The underlying model that Tacspeak currently uses is based on "16-bit Signed Integer PCM 1-channel 16kHz" audio. Tacspeak tries to convert the incoming audio from your device to this format, but if it's too much for a single CPU core to convert in real-time it may fall over. 
-    - I've had no issues using Tacspeak with a 48kHz, 16-bit, 2-channel microphone array and also using a Rode AI-1 and Podmic at 48kHz, 24-bit, 1-channel. 
-    - If, for example, your device is recording at 144kHz, or something a single core on your CPU can't handle, it will likely display errors in the console.
-- If you no longer hear audio from your output device (headphones), or no audio is coming through from your input device (microphone), you might have to disable "Exclusive Mode" for your audio device in Windows Sound Settings. Follow these steps to disable Exclusive Mode:
-    - Right-click the Speaker icon on the Windows toolbar, and select Open Sound settings.
-    - Click Device properties located underneath Choose your output device, then click Additional device properties located underneath Related Settings.
-    - In the Line Properties window, click the Advanced tab, then uncheck Allow applications to take exclusive control of this device.
-    - Click Apply, then click OK.
-- All commands are being queued? AZERTY keyboard? You might need to change your in-game keybinding for "Hold command" to something other than Shift, and also update the key bindings in `./tacspeak/grammar/_readyornot.py`.
-- In your Windows privacy and security settings, can apps (including Tacspeak) access your microphone?  Is your microphone working in other apps?
-- Try setting `USE_NOISE_SINK` (in `./tacspeak/user_settings.py`) to `True` or `False` if you're getting too many false positive or false negative speech recognitions respectively.
-- If you want to retain recordings of the speech recognitions from Tacspeak, set `retain_dir`, `retain_audio` and `retain_metadata` (in `./tacspeak/user_settings.py`) appropriately.
+As a result, I found out that Dragonfly can handle WSR, so I was able to made it with few changes.
+It also helped that Dragonfly and Tacspeak themselves has simple and compact codes.
 
-## Advanced install - Python
+I would like to express my thanks and respect to jwebmeister, the author of the original Tacspeak.
 
-### Prerequisites: 
+## ロードマップ | Roadmap
 
-1. [Microsoft Visual C++ Redistributable](https://aka.ms/vs/17/release/vc_redist.x64.exe) installed
-2. Python 3.11 installed
-
-### Steps:
-
-1. Clone this repo into a folder, e.g. `Tacspeak/`.
-2. Download a pre-trained Kaldi model .zip from the [latest release](https://github.com/jwebmeister/tacspeak/releases/latest/) and extract into the cloned project folder, e.g. `Tacspeak/kaldi_model/` after extraction.
-3. Open the `Tacspeak/` folder in PowerShell (or equivalent).
-4. Strongly recommended to use a virtual environment, e.g. 
-    - create within `Tacspeak` folder: `python -m venv "./.venv"`
-    - activate within `Tacspeak` folder: `./.venv/Scripts/Activate.ps1`
-5. Install required packages via pip
-    - `pip install -r requirements.txt`
-6. Done! Should now be able to run Tacspeak via `python ./cli.py`
-
-
-## Build instructions
-
-### Prerequisites: 
-
-1. [Microsoft Visual C++ Redistributable](https://aka.ms/vs/17/release/vc_redist.x64.exe) installed
-2. Python 3.11 installed
-3. A compatible compiler for cx_freeze installed, 
-    - Only tested Visual Studio 2022, [MSVC](https://visualstudio.microsoft.com/downloads/)
-4. (Optional, but necessary for releases) PortAudio v19.7.0, `portaudio_x64.dll`, build from [source here](https://files.portaudio.com/archives/pa_stable_v190700_20210406.tgz) using [docs here](https://files.portaudio.com/docs/v19-doxydocs/compile_cmake.html), or [download here](https://github.com/jwebmeister/portaudio/releases/tag/v19.7.0)
-
-### Steps - Option 1
-
-1. Clone this repo into a folder, e.g. `Tacspeak/`.
-2. Open the `Tacspeak/` folder in PowerShell, keep it as your current working directory.
-3. Create and activate a python virtual environment in directory `./.venv`, e.g. 
-    - create within `Tacspeak` folder: `python -m venv "./.venv"`
-    - activate within `Tacspeak` folder: `./.venv/Scripts/Activate.ps1`
-4. Run `scripts\setup_for_build.ps1` in PowerShell. This will download and install dependencies via running the following scripts:
-    - scripts\pip_reinstall_all.ps1
-    - scripts\download_replace_portaudio_x64_dll.ps1
-    - scripts\download_extract_model.ps1
-    - scripts\move_extracted_model.ps1
-    - scripts\generate_all_licenses.ps1
-5. Run `scripts\build_app.ps1` in PowerShell
-
-
-### Steps - Option 2
-
-1. Clone this repo into a folder, e.g. `Tacspeak/`.
-2. Download a pre-trained Kaldi model .zip from the [latest release](https://github.com/jwebmeister/tacspeak/releases/latest/) and extract into the cloned project folder, e.g. `Tacspeak/kaldi_model/`.
-3. Open the `Tacspeak/` folder in PowerShell (or equivalent).
-4. Strongly recommended to use a virtual environment, e.g. 
-    - create within `Tacspeak` folder: `python -m venv "./.venv"`
-    - activate within `Tacspeak` folder: `./.venv/Scripts/Activate.ps1`
-5. Install required packages via pip
-    - `pip install -r requirements.txt`
-6. (Optional, but necessary for releases) rename `portaudio_x64.dll` to `libportaudio64bit.dll`, copy and paste overwriting the existing file located at `./venv/Lib/site-packages/_sounddevice_data/portaudio-binaries/libportaudio64bit.dll`.
-7. Build via setup.py
-    - `python setup.py build`
-
-## Motivation
-
-I built Tacspeak because I was fed-up with how poorly accurate the Windows Speech Recognition engine was with my voice, even after training. No other alternatives I tested (there were many) fit exactly what I wanted from speech recognition while gaming. 
-
-What I learned from my research and testing:
-- most state-of-the-art Automatic Speech Recognition (ASR) systems are not fit for the purpose of speech command recognition while gaming. They:
-    - take too long, e.g. 1-3 seconds.
-    - take too much memory, e.g. 2-4 GB of VRAM (textures pop-in in-game). 
-    - take too much CPU/GPU processing power.
-    - are designed for wider applications beyond speech *command* recognition, e.g. free-form dictation.
-- there are decades-old ASR's that are fit-for-purpose, but their tool and build chains were too unwieldy.
-- on paper, the Windows Speech Recognition engine should be perfect for my use-case, it just hates me (and everyone else).
-- I needed a customisable speech recognition framework to fit my specific use-case.
-
-Tacspeak isn't perfect, but it is a very strong option, precisely because it can be so highly customised to your specific commands, for your specific application.
-
-## Contributing
-
-Issues, suggestions, and feature requests are welcome. 
-
-Pull requests are considered, but be warned the project structure is in flux and there may be breaking changes to come.  
-We'd also like *some* (TBD) quality testing be done on grammar modules before they're brought into the project. If you can help define what we mean by "some (TBD) quality testing"... well, trailblazers are welcome!
-
-Tacspeak uses a modified version of Dragonfly located at [jwebmeister/dragonfly](https://github.com/jwebmeister/dragonfly).  This is where the heart of the beast (bugs) lives... please help slay it!  
-Also, be warned the project structure is in flux and there may be breaking changes there too.
-
-You can also consider supporting the projects Tacspeak are built upon, [dictation-toolbox/dragonfly](https://github.com/dictation-toolbox/dragonfly) and [daanzu/kaldi-active-grammar](https://github.com/daanzu/kaldi-active-grammar).
-
-Any and all donations are very much appreciated and help encourage development.
-
-[![Donate](https://img.shields.io/badge/donate-GitHub-pink.svg)](https://github.com/sponsors/jwebmeister) [![Donate](https://img.shields.io/badge/donate-PayPal-green.svg)](https://paypal.me/jwebmeister)
+- 前提として、このプロジェクトは個人の趣味です。サポート内容や期間については一切お約束できないことをご了承ください。
+  This project is personal. I can not guarantee any support, but I would to help you as I can if you need.
+- プログラム本体にこれ以上変更を加える予定はありません。
+  I have no plan to change any more the main programs for now.
+- あるとすれば、Ready or Not向け付属grammarの改良、またはオリジナルTacspeakの変更で適用すべきものの反映などを想定しています。
+  If some changes happen on original Tacspeak, I would check if it need to be applied to my project. And also I may update the grammar contained.
+- その他、使い方などの問い合わせに適宜対応します。
+  I will reply to your questions/comments as I can.
+- このプロジェクトはオープンソースです。ライセンスの範囲内で誰でも自由に改変できます。
+  This project is open source. Anyone can modify that within license below.
 
 ## Author
 
-- Joshua Webb ([@jwebmeister](https://github.com/jwebmeister))
+- Domtaro ([@Domtaro](https://github.com/Domtaro))
+- Joshua Webb ([@jwebmeister](https://github.com/jwebmeister)) - The original Tacspeak
 
 ## License
 
@@ -280,6 +235,3 @@ This project is licensed under the GNU Affero General Public License v3 (AGPL-3.
 ## Acknowledgments
 
 - Based upon and may include code from "Dragonfly" [dictation-toolbox/dragonfly](https://github.com/dictation-toolbox/dragonfly), under the LGPL-3.0 license.
-- Based upon and may include code from "Kaldi Active Grammar" [daanzu/kaldi-active-grammar](https://github.com/daanzu/kaldi-active-grammar), under the AGPL-3.0 license.
-
--->
