@@ -92,7 +92,7 @@ I named 'JP' but, I guess it can works for any other languages what is supported
     - 起動時の「ビギニングループ」の音声は、Dragonfly標準部分で再生されているので設定等でオフにはできません。音量ミキサーでアプリの音量を0にすれば聞こえなくなるかもしれません  
 5. Ctrl+C または 右上×で終了する  
 
-***注意！***  
+**注意！**  
 `./tacspeak/user_settings.py` と `./tacspeak/grammar/_*.py` は自動で読み込まれます。  
 信頼できない第三者のファイルが混入し実行されないように注意してください。  
 
