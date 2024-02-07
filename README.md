@@ -8,7 +8,7 @@
 「TacspeakJP」は、[jwebmeister](https://github.com/jwebmeister)氏制作のゲーム向け音声コマンディングツール「[Tacspeak](https://github.com/jwebmeister/tacspeak)」を、日本語音声入力に対応するように改修したものです。  
 
 'TacspeakJP' is modified edition of 'Tacspeak' tool created by jwebmeister. It provide Japanese language speach recognition.  
-  
+
 サンプルとして、Ready or Notで使用している様子がこちらで見れます。  
 [![Ready or Notで使用するデモプレイYoutubeビデオ](http://img.youtube.com/vi/orJuWn9rZoc/maxresdefault.jpg)](https://youtu.be/orJuWn9rZoc)  
 ---
