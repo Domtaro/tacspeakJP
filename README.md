@@ -5,12 +5,12 @@
 
 ## はじめに | Introduction  
 
-「TacspeakJP」は、jwebmeister氏制作のゲーム向け音声コマンディングツール「Tacspeak」を、日本語音声入力に対応するように改修したものです。  
+「TacspeakJP」は、[jwebmeister](https://github.com/jwebmeister)氏制作のゲーム向け音声コマンディングツール「[Tacspeak](https://github.com/jwebmeister/tacspeak)」を、日本語音声入力に対応するように改修したものです。  
 
 'TacspeakJP' is modified edition of 'Tacspeak' tool created by jwebmeister. It provide Japanese language speach recognition.  
-<!--
-[![Ready or Notで使用するデモプレイ](https://img.youtube.com/vi/)](https://youtu.be/)
--->
+  
+サンプルとして、Ready or Notで使用している様子がこちらで見れます。  
+[![Ready or Notで使用するデモプレイYoutubeビデオ](http://img.youtube.com/vi/orJuWn9rZoc/maxresdefault.jpg)](https://youtu.be/orJuWn9rZoc)  
 ---
 
 オリジナルのTacspeakは、カスタマイズされた [jwebmeister/dragonfly](https://github.com/jwebmeister/dragonfly) 音声認識フレームワークと、 動的デコードを実現する [Kaldi Active Grammar](https://github.com/daanzu/kaldi-active-grammar/) エンジンによって、優れた認識精度や応答性を実現しています。  
@@ -89,10 +89,10 @@ I named 'JP' but, I guess it can works for any other languages what is supported
 3. `tacspeak.exe` を実行する（ツールとゲームの起動はどちらが先でも構いません。）  
 4. 「ビギニングループ」という音声が聞こえて、"Ready to listen..." の表示で待機したら起動しています。ゲームを起動して使用してみてください  
     - マイクに喋ると、認識された音声が文字で表示されます。誤認識のチェックなどができます  
-    - 起動時の「ビギニングループ」の音声は、Dragonfly標準部分で再生されているので設定等でオフにはできません。音量ミキサーでアプリの音量を0にすれば聞こえなくなるかもしれません  
+    - 起動時の「ビギニングループ」の音声は、Dragonflyにハードコーディングされた部分で再生されているので設定等でオフにはできません。音量ミキサーでアプリの音量を0にすれば聞こえなくなるかもしれません  
 5. Ctrl+C または 右上×で終了する  
 
-**【注意！】**  
+### **【注意！】**  
 `./tacspeak/user_settings.py` と `./tacspeak/grammar/_*.py` は自動で読み込まれます。  
 信頼できない第三者のファイルが混入し実行されないように注意してください。  
 
@@ -136,29 +136,29 @@ I named 'JP' but, I guess it can works for any other languages what is supported
     - 普段よりはっきり発音することを意識してみて下さい。  
     - マイクの感度が高い場合、周囲の雑音が影響することも考えられます。可能な限りマイク感度を下げ、空調などの雑音を減らしてください。  
 - 言葉は正しいのにコマンドが発動しない  
-    - 正しい位置をポイントしていることを確認してください。（ドアのコマンドならドアをポイントしていること）  
-      ツール側では、「いまどこを見ているか」を判別しません。  
+    - 正しい位置をポイントしていることを確認してください。（ドアに対するコマンドならドアをポイントしていること）  
+      ツール側では、「ゲーム内で今どこを見ているか」を判別しません。  
     - 複数の場面に同じ言葉の並びを設定するとうまくいかない場合があります。  
       例えば、単に「とまれ」とだけ言うと、チームへの停止命令か、動いている民間人への命令か特定できません。  
       どちらかのコマンドに、「そこで とまれ」のように言葉を加えてたりして区別できるようにしてみて下さい。  
-    - 見かけ上は同じ「しゅうごう」でも、どうやら内部的に違いがあってコマンド発動に影響する場合があるようです。  
-      WSRの仕様を把握しきれていないため詳細不明です。  
+    - 例えば、見かけ上は同じ「しゅうごう」でも、どうやら内部的に違いがあってコマンド発動に影響する場合があるようです。  
+      WSRの仕様を把握しきれていないため詳細は不明です。  
       「しゅうごう しろ」のように他の言葉と一緒に言うと改善する場合があります。  
     - 実際にキー入力で実行できないコマンドは動作しません  
-      例えば、一部のドアで「左にスタック」が無効になっていたりするなど  
+      例えば、一部のドアで「左にスタック」が無効になっていたりする場合など  
     - `./tacspeak/user_settings.py` で `DEBUG_MODE = True` を設定して起動することで、ツール単体で動作確認ができます。  
       ゲームを起動してフォーカスしている必要はなく、キー入力も実際には行われません。  
       発音の認識結果のほかに、エミュレートされたキーも表示されます。  
 - 認識されるのが遅い  
     - Kaldiエンジンに比べると反応が遅いかもしれません。現状、Windows音声認識を使うことによる限界があります。  
     - エール（手を挙げろ！など）のように素早く発動することが重要なコマンドは、そもそも不向きです。  
-      現実で言葉を言い終わってからコマンドを発動するという仕組み上、発動できる早さに限界があります。  
-      これはKaldi Active Grammarで応答性を増した本家Tacspeakであっても同様です。  
-      咄嗟のエールなどは最初の１回はキー入力で出すことをお勧めします。  
+      現実で言葉を言い終わってからようやくゲーム内でコマンドを発動するという仕組み上、発動できる速さに限界があります。  
+      これはKaldi Active Grammarで応答性を向上させた、本家Tacspeakでさえも同様です。  
+      咄嗟のエールなどは最初の１回は手動でキー入力で出すことをお勧めします。  
 - そのほかの制限  
-    - 視線の手前と奥に二つドアがある場合、どちらのドアへの指示かの選択が最初に追加されますが、付属のgrammarではそのパターンに対応していません。  
-      あなたの手で改良すれば対応可能かもしれません。  
-      本家Tacspeakでその話題の議論があったはずなので参考にするとよいかもしれません。  
+    - 視線の手前と奥に二つドアがある場合、どちらのドアへの指示かを決める入力が先頭に追加されますが、付属のgrammarではそのパターンに対応していません。  
+      しかし、あなたの手で改良すれば対応可能かもしれません。  
+      本家Tacspeakでも[その件に関する議論](https://github.com/jwebmeister/tacspeak/issues/15)がありました（未解決）。参考にしてみてください。  
 
 
 ## （開発者向け）ビルド方法 | How to build (for deveropper, in Japanese only)  
@@ -166,22 +166,22 @@ I named 'JP' but, I guess it can works for any other languages what is supported
 編集中です。以下はメモ。  
 
 - Python 3.11 が必須（3.12不可）  
-- freeze.txt の内容が前提パッケージ  
+- `Freeze.txt` の内容が前提パッケージ（`requirements.txt` と同一）  
 - win32comのためにVisual Studio（コミュニティ版で可）のインストールが必要  
     - Python 開発 - Python ネイティブ開発ツール をチェック  
-      他にもあったかもしれないけど忘れた  
+      他にもあったかもしれないけど忘れてしまった  
 - ビルド手順  
     - `setup.py` のディレクトリでpowershellを開く  
     - `py -m venv "./.venv"`  
     - `./.venv/Scripts/activate`  
     - (.venv)に切り替わっていること  
-    - `py -m pip install -r requirements.txt`  
+    - `py -m pip install -r requirements.txt` （前提パッケージに変更が無ければ２回目以降不要）  
     - `py setup.py build`  
 
 
 ## モチベーション | Motivation  
 
-'Tacspeak'は、他にはないゲーム体験を提供してくれる素晴らしいツールです。しかし日本ではネイティブな英語発音に親しみづらい人も少なくなく、言語の壁で対象ユーザーが限られてしまうことをとても残念に感じました。  
+'Tacspeak'は、他にはないゲーム体験を提供してくれる素晴らしいツールです。しかし日本ではネイティブな英語発音に親しみがない人も少なくなく、言語の壁で対象ユーザーが限られてしまうことをとても残念に感じました。  
 そこで、より多くのユーザーにTacspeakの魅力を届けたいという思いから、日本語入力を取り扱うことができないか検討してみました。  
 
 結果として、DragonflyがWSRをハンドルできることが分かったため、比較的少ない変更で実装できました。  
@@ -200,7 +200,7 @@ I would like to express my thanks and respect to jwebmeister, the author of the 
 
 ## ロードマップ | Roadmap  
 
-- 前提として、このプロジェクトは個人の趣味です。サポート内容や期間については一切お約束できないことをご了承ください。  
+- まず、このプロジェクトは個人の趣味です。サポート内容や期間については一切お約束できないことをご了承ください。  
   This project is personal. I can not guarantee any support, but I would to help you as I can if you need.  
 - 今のところ、プログラム本体にこれ以上変更を加える予定はありません。  
   I have no plan to change any more the main programs for now.  
@@ -208,8 +208,8 @@ I would like to express my thanks and respect to jwebmeister, the author of the 
   If some changes happen on original Tacspeak, I would check if it need to be applied to my project. And also I may update the grammar contained.  
 - その他、使い方などの問い合わせに適宜対応します。  
   I will reply to your questions/comments as I can.  
-- このプロジェクトはオープンソースです。ライセンスの範囲内で誰でも自由に改変できます。  
-  This project is open source. Anyone can modify that within license below.  
+- このプロジェクトはオープンソースです。ライセンスの範囲内で誰でも自由に改変できます。私への伺い立て等も不要です。  
+  This project is open source. Anyone can modify that within license below. It's no need to notify me.  
 
 
 ## 制作者 | Author  
@@ -226,3 +226,4 @@ This project is licensed under the GNU Affero General Public License v3 (AGPL-3.
 ## 謝辞 | Acknowledgments  
 
 - Based upon and may include code from "Dragonfly" [dictation-toolbox/dragonfly](https://github.com/dictation-toolbox/dragonfly), under the LGPL-3.0 license.  
+- Based upon and may include code from "Tacspeak" [jwebmeister/tacspeak](https://github.com/jwebmeister/tacspeak), under the LGPL-3.0 license.  
