@@ -10,7 +10,9 @@
 'TacspeakJP' is modified edition of 'Tacspeak' tool created by jwebmeister. It provide Japanese language speach recognition.  
 
 サンプルとして、Ready or Notで使用している様子がこちらで見れます。  
+
 [![Ready or Notで使用するデモプレイYoutubeビデオ](http://img.youtube.com/vi/orJuWn9rZoc/maxresdefault.jpg)](https://youtu.be/orJuWn9rZoc)  
+
 ---
 
 オリジナルのTacspeakは、カスタマイズされた [jwebmeister/dragonfly](https://github.com/jwebmeister/dragonfly) 音声認識フレームワークと、 動的デコードを実現する [Kaldi Active Grammar](https://github.com/daanzu/kaldi-active-grammar/) エンジンによって、優れた認識精度や応答性を実現しています。  
@@ -71,25 +73,26 @@ I named 'JP' but, I guess it can works for any other languages what is supported
 5. （任意・推奨）「音声辞書」に単語を登録する  
     - 「音声認識の開始」をクリックして音声認識のGUIを表示  
     - 画面上部のマイクアイコン または タスクバーのマイクアイコンを右クリック → 音声辞書を開く  
-    - "おぷてぃわんど"や"はじょうつい"などの特別な単語を登録する（後述のgrammar設定のために、ひらがなで登録することを推奨します）  
+    - "おぷてぃわんど"や"はじょうつい"などの特別な言葉を登録する（後述のgrammar設定のために、ひらがなで登録することを推奨します）。  
     - 「完了時に発音を録音する」をチェックして自分の発音を登録することで、さらに認識精度を高められる。  
 6. （任意）「高度な音声オプション」をクリック  
     - 「音声認識」タブの下部、「マイク」-「詳細設定」で使用するマイクを指定できる。後述のツール側オプションでも指定可能。  
 
 ### ツールのセットアップ・実行  
 1. `user_settings.py` の内容を確認・編集する  
-    - WSR_AUDIO_SOURCE_INDEX で使用するマイクを指定できる。どのマイクが何番のインデックスかは、 `tacspeakJP.exe --get_audio_sources` を実行することで確認できる  
+    - WSR_AUDIO_SOURCE_INDEX で使用するマイクを指定できる。どのマイクが何番のインデックスかは、 `tacspeakJP.exe --get_audio_sources` を実行することで確認できる。  
 2. grammar の内容を確認・編集する（Ready or Notの場合、デフォルト用として `tacspeak/grammar/_readyornot_jp.py` を同梱）  
-    - `grammar_context` にフックするゲームのexeのパス（の一部）を指定する（case-insensitive）  
-    - `ingame_key_bindings` にゲームの自分のキーバインド設定を反映する  
-    - `map_` で始まる変数に、追加／変更したい言葉があれば反映する  
-    - `spec` という変数に、追加／変更したい文法（言い回し）があれば反映する  
-    - `YellFreeze` クラスに、エール（シャウト、降伏呼びかけ）の言葉を好みに応じて追加／変更する  
-    - そのほか、[Dragonflyのドキュメント](https://dragonfly2.readthedocs.io/en/latest/rules.html) などを参考に、自分用のルールを追加できる  
+    - `grammar_context` にフックするゲームのexeのパス（の一部）を指定する（大文字／小文字区別なし）。  
+    - `ingame_key_bindings` にゲームの自分のキーバインド設定を反映する。  
+    - `map_` で始まる変数に、追加／変更したい言葉があれば反映する。  
+    - `spec` という変数に、追加／変更したい文法（言い回し）があれば反映する（複数個所にあります）。  
+    - `YellFreeze` クラスに、エール（シャウト、降伏呼びかけ）の言葉を好みに応じて追加／変更する。  
+    - そのほか、[Dragonflyのドキュメント](https://dragonfly2.readthedocs.io/en/latest/rules.html) などを参考に、自分用のルールを追加できる。  
 3. `tacspeak.exe` を実行する（ツールとゲームの起動はどちらが先でも構いません。）  
-4. 「ビギニングループ」という音声が聞こえて、"Ready to listen..." の表示で待機したら起動しています。ゲームを起動して使用してみてください  
+4. 「ビギニングループ」という音声が聞こえて、"Ready to listen..." の表示で待機したら起動しています。ゲームのウィンドウをアクティブにして試してみてください。  
     - マイクに喋ると、認識された音声が文字で表示されます。誤認識のチェックなどができます  
     - 起動時の「ビギニングループ」の音声は、Dragonflyにハードコーディングされた部分で再生されているので設定等でオフにはできません。音量ミキサーでアプリの音量を0にすれば聞こえなくなるかもしれません  
+    - デバッグモードを使えば、ゲームを起動せずにテストすることもできます。詳細は「トラブルシューティング」の項目を参照してください。  
 5. Ctrl+C または 右上×で終了する  
 
 ### **【注意！】**  
@@ -226,4 +229,4 @@ This project is licensed under the GNU Affero General Public License v3 (AGPL-3.
 ## 謝辞 | Acknowledgments  
 
 - Based upon and may include code from "Dragonfly" [dictation-toolbox/dragonfly](https://github.com/dictation-toolbox/dragonfly), under the LGPL-3.0 license.  
-- Based upon and may include code from "Tacspeak" [jwebmeister/tacspeak](https://github.com/jwebmeister/tacspeak), under the LGPL-3.0 license.  
+- Based upon and may include code from "Tacspeak" [jwebmeister/tacspeak](https://github.com/jwebmeister/tacspeak), under the AGPL-3.0 license.  
