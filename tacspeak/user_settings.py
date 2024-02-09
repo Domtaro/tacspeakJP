@@ -11,5 +11,5 @@ def my_retain_func(audio_store):
     """Used in retain_approval_func"""
     return not 'NoiseSink' in audio_store.rule_name
 
-WSR_AUDIO_SOURCE_INDEX = 0                      # index of microphone using. You can see the mic list by:
-                                                # tacspeakJP.exe --get_audio_sources
+#WSR_AUDIO_SOURCE_INDEX = 0                      # index of microphone using. You can see the mic list by:
+#                                                # tacspeakJP.exe --get_audio_sources

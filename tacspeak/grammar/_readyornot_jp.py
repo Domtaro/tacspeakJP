@@ -10,6 +10,10 @@ from dragonfly import (BasicRule, CompoundRule, MappingRule, RuleRef, Repetition
                        AppContext, Dictation)
 from dragonfly.actions import (Key, Mouse, ActionBase)
 
+import os
+import re
+import copy
+
 # ---------------------------------------------------------------------------
 # Check DEBUG_MODE (from user_settings)
 
@@ -60,6 +64,70 @@ min_delay = 3.3  # 100/(30 fps) = 3.3 (/100 seconds between frames)
 # map of action to in-game key bindings
 # https://dragonfly.readthedocs.io/en/latest/actions.html#key-names
 # https://dragonfly.readthedocs.io/en/latest/actions.html#mouse-specification-format
+
+# map of key name RoN to Dragonfly except for case-difference only pattern
+map_ron_dragonfly_keynames = {
+    "None": "",
+    "LeftMouseButton": "mouse_left",
+    "MiddleMouseButton": "mouse_middle",
+    "RightMouseButton": "mouse_right",
+    "ThumbMouseButton": "mouse_four",
+    "ThumbMouseButton2": "mouse_five",
+    "MouseScrollUp": "mouse_wheelup",
+    "MouseScrollDown": "mouse_wheeldown",
+    "Zero": "0",
+    "One": "1",
+    "Two": "2",
+    "Three": "3",
+    "Four": "4",
+    "Five": "5",
+    "Six": "6",
+    "Seven": "7",
+    "Eight": "8",
+    "Nine": "9",
+    "Zero": "0",
+    "NumPadOne": "numpad1",
+    "NumPadTwo": "numpad2",
+    "NumPadThree": "numpad3",
+    "NumPadFour": "numpad4",
+    "NumPadFive": "numpad5",
+    "NumPadSix": "numpad6",
+    "NumPadSeven": "numpad7",
+    "NumPadEight": "numpad8",
+    "NumPadNine": "numpad9",
+    "Divide": "slash",
+    "SpaceBar": "space",
+    "LeftShift": "shift",
+    "LeftControl": "ctrl",
+    "LeftAlt": "alt",
+    "RightShift": "rshift",
+    "RightControl": "rctrl",
+    "RightAlt": "ralt",
+}
+
+# map of action name Tacspeak to RoN
+map_tacspeak_ron_actionnames = {
+    "gold" : "SelectElementGold",
+    "blue": "SelectElementBlue",
+    "red": "SelectElementRed",
+    "cmd_1": "SwatInputKeyOne",
+    "cmd_2": "SwatInputKeyTwo",
+    "cmd_3": "SwatInputKeyThree",
+    "cmd_4": "SwatInputKeyFour",
+    "cmd_5": "SwatInputKeyFive",
+    "cmd_6": "SwatInputKeySix",
+    "cmd_7": "SwatInputKeySeven",
+    "cmd_8": "SwatInputKeyEight",
+    "cmd_9": "SwatInputKeyNine",
+    "cmd_back": "SwatInputKeyBack",
+    "cmd_hold": "HoldGoCode",
+    "cmd_default": "IssueDefaultCommand",
+    "cmd_menu": "OpenSwatCommand",
+    "interact": "UseOnly",
+    "yell": "Yell",
+}
+
+# default key bindings, use when failed to set automatically
 ingame_key_bindings = {
     "gold": "f5",
     "blue": "f6",
@@ -85,6 +153,64 @@ ingame_key_bindings = {
     "yell": "f",
 }
 
+# get list of RoN in-game key settings from ini file, and make action-keyname map
+# edit the path if it's not along with your environment
+inifile_name = os.path.expandvars(r"%LOCALAPPDATA%\ReadyOrNot\Saved\Config\WindowsNoEditor\Input.ini")
+if os.path.isfile(inifile_name):
+    with open(inifile_name, "rt", encoding="utf-8") as inifile:
+        try:
+            ron_key_bindings = {}
+            key_setting_pattern = re.compile(r'^ActionMappings=\(ActionName="(\w+)".+Key=(\w+)')
+            for inifile_line in inifile:
+                match_result = re.match(key_setting_pattern, inifile_line)
+                if match_result:
+                    ron_action_name = match_result.group(1)
+                    ron_key_name = match_result.group(2)
+                    # convert specific key name to Dragonfly key names
+                    if ron_key_name in map_ron_dragonfly_keynames:
+                        ron_key_bindings[ron_action_name] = map_ron_dragonfly_keynames[ron_key_name]
+                    else:
+                        ron_key_bindings[ron_action_name] = ron_key_name.lower()
+
+            # make ingame_key_bindings automatically
+            for tacspeak_action in map_tacspeak_ron_actionnames.keys():
+                ron_action = map_tacspeak_ron_actionnames[tacspeak_action]
+                if ron_action in ron_key_bindings:
+                    ingame_key_bindings[tacspeak_action] = copy.deepcopy(ron_key_bindings[ron_action])
+                else:
+                    continue
+
+        except Exception:
+            print(f"Failed to open `{inifile_name}`. Using default key-bindings")
+else:
+    print(f"Invalid File name `{inifile_name}` was ignored. Using default key-bindings")
+
+# override key-bindings manually if you need
+ingame_key_bindings.update({
+    # "gold": "f5",
+    # "blue": "f6",
+    # "red": "f7",
+    "alpha": "f13",
+    "bravo": "f14",
+    "charlie": "f15",
+    "delta": "f16",
+    # "cmd_1": "1",
+    # "cmd_2": "2",
+    # "cmd_3": "3",
+    # "cmd_4": "4",
+    # "cmd_5": "5",
+    # "cmd_6": "6",
+    # "cmd_7": "7",
+    # "cmd_8": "8",
+    # "cmd_9": "9",
+    # "cmd_back": "tab",
+    # "cmd_hold": "shift",
+    # "cmd_default": "z",
+    # "cmd_menu": "mouse_middle",
+    # "interact": "f",
+    # "yell": "f",
+})
+
 def debug_print_key(device, key):
     print(f'({device}_{key})')
 
@@ -103,6 +229,11 @@ print("-- Ready or Not keybindings --")
 for (k, v) in map_ingame_key_bindings.items():
     print(f'{k}:{v}')
 print("-- Ready or Not keybindings --")
+if DEBUG_MODE:
+    print("-- Ready or Not In-Game keybindings --")
+    for (k, v) in ron_key_bindings.items():
+        print(f'{k}:{v}')
+    print("-- Ready or Not In-Game keybindings --")
 
 # mappings of spoken phrases to values
 map_hold = {
@@ -166,6 +297,7 @@ map_door_stack_sides = {
     "さゆう": "split",
     "ひだり": "left",
     "みぎ": "right",
+    "まかせ る": "auto",
 }
 map_door_breach_tools = {
     "open": "open",
@@ -462,6 +594,43 @@ class SelectColor(CompoundRule):
 
 # ------------------------------------------------------------------
 
+def cmd_default_action(color, hold):
+    """
+    Press & release command keys for team to stack up (on execution)
+    """
+    actions = cmd_select_team(color)
+    actions += map_ingame_key_bindings["cmd_menu"]
+    # start hold for command
+    if hold == "hold":
+        actions += action_hold("down")
+    actions += map_ingame_key_bindings["cmd_default"]
+    # end hold for command
+    if hold == "hold":
+        actions += action_hold("up")
+    return actions
+
+class ExecuteDefault(CompoundRule):
+    """
+    Speech recognise default command
+    """
+    spec = "<color> [ちーむ] <hold> (でふぉると | おい | あれ だ | たいおう しろ)"
+    extras = [
+        Optional(Choice("color_choice", map_colors), "color", "current"),
+        Optional(Choice("hold_choice", map_hold), "hold", "go"),
+    ]
+    defaults = {
+        "color": "current",
+        "hold": "go",
+    }
+
+    def _process_recognition(self, node, extras):
+        color = extras["color"]
+        hold = extras["hold"]
+        print(f"{color} team {hold} execute default")
+        cmd_default_action(color, hold).execute()
+
+# ------------------------------------------------------------------
+
 def cmd_door_options(color, hold, door_option, trapped):
     """
     Press & release command keys for team to mirror under, wedge, cover, open, 
@@ -663,7 +832,8 @@ class StackUp(CompoundRule):
         # todo! in 1.0 some doors don't have all stack options available, change to "auto" if/when Void update
         # keeping as "split" for now because it's cmd_1 and don't want to swap off primary weapon if stack options 
         # aren't available
-        "side": "split", 
+        # "side": "split", 
+        "side": "auto",
     }
 
     def _process_recognition(self, node, extras):
@@ -1247,6 +1417,7 @@ grammar.add_rule(UseDeployable())
 grammar.add_rule(NpcPlayerInteract())
 grammar.add_rule(NpcTeamRestrain())
 grammar.add_rule(NpcTeamDeploy())
+grammar.add_rule(ExecuteDefault())
 # grammar.add_rule(TeamMemberOptions()) # needs key bindings for alpha-delta in-game
 # grammar.add_rule(SelectTeamMember()) # needs key bindings for alpha-delta in-game
 

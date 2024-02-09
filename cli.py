@@ -16,7 +16,7 @@ from multiprocessing import freeze_support
 from win32com.server import util
 
 def main():
-    print(f"Tacspeak version {tacspeak.__version__}")
+    print(f"TacspeakJP version {tacspeak.__version__}")
     print_notices()
 
     parser = argparse.ArgumentParser(description='Start speech recognition.')

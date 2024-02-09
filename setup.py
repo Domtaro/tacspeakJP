@@ -17,8 +17,9 @@ def get_version():
         directory = os.getcwd()
     path = os.path.join(directory, "version.txt")
     version_string = open(path).readline()
-    match = re.match(r"\s*(?P<rel>(?P<ver>\d+\.\d+)(?:\.\S+)*)\s*", version_string)
+    match = re.match(r"\s*(?P<rel>(?P<ver>\d+\.\d+)(?P<verjp>\.\S+)*)\s*", version_string)
     version = match.group("ver")
+    version_jp = match.group("verjp")
     release = match.group("rel")
     return release
 

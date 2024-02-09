@@ -41,8 +41,10 @@ def main():
     try:
         WSR_AUDIO_SOURCE_INDEX = (sys.modules["user_settings"]).WSR_AUDIO_SOURCE_INDEX
     except Exception:
-        print("Failed to load `tacspeak/user_settings.py` WSR_AUDIO_SOURCE_INDEX. Using default settings as fallback.")
-        WSR_AUDIO_SOURCE_INDEX = 0
+        if DEBUG_MODE:
+            print("Not defined or Failed to load `tacspeak/user_settings.py` WSR_AUDIO_SOURCE_INDEX. keeping mic setting default.")
+
+        WSR_AUDIO_SOURCE_INDEX = None
 
     def log_handlers():
         log_file_path = os.path.join(os.getcwd(), ".tacspeak.log")
@@ -85,7 +87,8 @@ def main():
     engine.connect()
 
     # set audio source.
-    engine.select_audio_source(WSR_AUDIO_SOURCE_INDEX)
+    if WSR_AUDIO_SOURCE_INDEX is not None:
+        engine.select_audio_source(WSR_AUDIO_SOURCE_INDEX)
 
     # Load grammars.
     grammar_path = os.path.join(os.getcwd(), os.path.relpath("tacspeak/grammar/"))
