@@ -8,7 +8,7 @@ import sys
 from dragonfly import (BasicRule, CompoundRule, MappingRule, RuleRef, Repetition, RecognitionObserver,
                        Function, Choice, IntegerRef, Grammar, Alternative, Literal, Text, Optional,
                        AppContext, Dictation)
-from dragonfly.actions import (Key, Mouse, ActionBase)
+from dragonfly.actions import (Key, Mouse, ActionBase, action_function)
 
 import os
 import re
@@ -214,7 +214,6 @@ ingame_key_bindings.update({
 def debug_print_key(device, key):
     print(f'({device}_{key})')
 
-
 if DEBUG_NOCMD_PRINT_ONLY:
     map_ingame_key_bindings = {k: Function(debug_print_key, device='m', key=v.replace("mouse_", "")) if "mouse_" in v
                                else Function(debug_print_key, device='kb', key=v)
@@ -238,7 +237,7 @@ if DEBUG_MODE:
 # mappings of spoken phrases to values
 map_hold = {
     "on my (mark | order | command)": "hold",
-    "[おれ の] あいず (で | したら | を まって)": "hold",
+    "[おれ の] (あいず | あいづ) (で | したら | を まって)": "hold",
 }
 map_execute_or_cancels = {
     "execute": "execute", 
@@ -279,6 +278,9 @@ map_door_options = {
     "かばー": "cover",
     "えんご": "cover",
     "あけ ろ": "open",
+    "ひらけ": "open",
+    "あけ て みろ": "open",
+    "ひらいて みろ": "open",
     "とじ ろ": "close",
     "しめ ろ": "close",
 }
@@ -295,8 +297,12 @@ map_door_stack_sides = {
     "right": "right",
     "auto": "auto", 
     "さゆう": "split",
-    "ひだり": "left",
-    "みぎ": "right",
+    "りょうがわ": "split",
+    "りょう がわ": "split",
+    "りょうわき": "split",
+    "りょうほう": "split",
+    "ひだり [がわ]": "left",
+    "みぎ [がわ]": "right",
     "まかせ る": "auto",
 }
 map_door_breach_tools = {
@@ -314,6 +320,7 @@ map_door_breach_tools = {
     "ひら いて": "open",
     "はい れ": "open",
     "はいって": "open",
+    "すすめ": "open",
     "とつにゅう": "open",
     "けやぶれ": "kick",
     "けやぶって": "kick",
@@ -351,7 +358,9 @@ map_door_scan = {
     "すきゃん": "pie",
     "ぱい": "pie",
     "かってぃんぐぱい": "pie",
-    "ぴーく": "peek"
+    "ぴーく": "peek",
+    "のぞけ": "peek",
+    "のぞ け": "peek",
 }
 map_ground_options = {
     # note: deploy and fall in are separate options
@@ -362,8 +371,11 @@ map_ground_options = {
     "(secure | search) [the] (area | room)": "search",
     "(search for | collect | secure) evidence": "search",
     "(そこ | あそこ) (に | へ) いけ": "move",
-    "いけ": "move",
-    "[(そこ を| あそこ を)] かばー [しろ]": "cover",
+    # "いけ": "move", # using for default order now (but your option)
+    # "[(そこ を| あそこ を)] かばー [しろ]": "cover", # using for door option now (but your option)
+    "[(そこ を| あそこ を)] みて いろ": "cover",
+    "[(そこ を| あそこ を)] みはって いろ": "cover",
+    "[(そこ を| あそこ を)] かんし しろ": "cover",
     "とまれ": "halt",
     "とまる": "halt",
     "まて": "halt",
@@ -411,22 +423,24 @@ map_npc_player_interacts = {
     "(get | move) outside": "move to exit",
     "(そこ | そっち) (に | へ) うごけ": "move here",
     "(おれ の ほう | こっち) (に | へ) (こい | うごけ)": "move my position",
-    "こい": "move my position",
+    # "こい": "move my position", # using for default order now (but your option)
     "[そこ で] とまれ": "move stop",
     "[そこ で] とまる": "move stop",
     "まわれ": "turn around",
     "まわる": "turn around",
     "ふりむけ": "turn around",
     "うしろ を むけ": "turn around",
-    "[ここ (を | から)] でろ": "move to exit",
-    "[ここ (を | から)] でる": "move to exit",
-    "[(でぐち | そと) (に | へ)] いけ": "move to exit",
+    "ここ (を | から) (でろ | でる)": "move to exit",
+    "(でぐち | そと) (に | へ | まで) (いけ | でろ | にげろ | はしれ)": "move to exit",
+    "だっしゅつ しろ": "move to exit",
 }
 map_npc_team_restrain = {
     "restrain": "restrain",
     "arrest": "restrain",
     "たいほ": "restrain",
     "こうそく": "restrain",
+    "しばれ": "restrain",
+    "てじょう": "restrain",
 }
 map_npc_team_deployables = {
     "taser": "taser",
@@ -438,12 +452,11 @@ map_npc_team_deployables = {
     "violence": "melee",
     "てーざー": "taser",
     "てーざー がん": "taser",
-    "ぺっぱーすぷれー": "pepperspray",
     "ぺっぱー すぷれー": "pepperspray",
-    "ぺっぱーぼーる": "pepperball",
     "ぺっぱー ぼーる": "pepperball",
     "びーんばっぐ": "beanbag",
     "なぐれ": "melee",
+    "めれー": "melee",
 }
 map_team_members = {
     "alpha": "alpha",
@@ -596,7 +609,7 @@ class SelectColor(CompoundRule):
 
 def cmd_default_action(color, hold):
     """
-    Press & release command keys for team to stack up (on execution)
+    Press & release command keys for team to do default action (on execution)
     """
     actions = cmd_select_team(color)
     actions += map_ingame_key_bindings["cmd_menu"]
@@ -611,9 +624,14 @@ def cmd_default_action(color, hold):
 
 class ExecuteDefault(CompoundRule):
     """
-    Speech recognise default command
+    Speech recognise default order
     """
-    spec = "<color> [ちーむ] <hold> (でふぉると | おい | あれ だ | たいおう しろ)"
+    # spec = "<color> [ちーむ] <hold> (でふぉると | おい | あれ だ | それ だ | これ だ | たいおう しろ)"
+    spec_start = "<color> [ちーむ] <hold> "
+    spec1 = "(でふぉると | おい | たいおう | いけ | こい)"
+    spec2 = "(あれ | それ | これ) [(だ | を | が)]"
+    spec_end = "(しろ | や れ)"
+    spec = f"{spec_start} ({spec1} | {spec2}) [{spec_end}]"
     extras = [
         Optional(Choice("color_choice", map_colors), "color", "current"),
         Optional(Choice("hold_choice", map_hold), "hold", "go"),
@@ -626,7 +644,7 @@ class ExecuteDefault(CompoundRule):
     def _process_recognition(self, node, extras):
         color = extras["color"]
         hold = extras["hold"]
-        print(f"{color} team {hold} execute default")
+        print(f"{color} team {hold} execute default order")
         cmd_default_action(color, hold).execute()
 
 # ------------------------------------------------------------------
@@ -685,7 +703,7 @@ class DoorOptions(CompoundRule):
     Speech recognise team mirror under, wedge, cover, open, close the door
     """
     # spec = "<color> [team] <hold> <door_option> [(the | that)] <trapped> (door [way] | opening | room)"
-    spec = "<color> [ちーむ] <hold> <trapped> [(どあ | つうろ| へや)] [(に | を)] <door_option> [(を つかえ | しろ)]"
+    spec = "<color> [ちーむ] <hold> <trapped> [(どあ | つうろ| へや | そこ)] [(に | を)] <door_option> [(を つかえ | しろ)]"
     extras = [
         Optional(Choice("color_choice", map_colors), "color", "current"),
         Optional(Choice("hold_choice", map_hold), "hold", "go"),
@@ -911,7 +929,7 @@ class BreachAndClear(CompoundRule):
     spec_start = "<color> [ちーむ] <hold>"
     spec_tool = "[<tool>] [(を | で)] [(つか え | つかって | やぶ れ | やぶって | あけ て | あけ ろ | とっぱ しろ | とっぱ して | して)]"
     spec_grenade = "<grenade> [(を | で)] [(つかって | なげ て | てんかい して)]"
-    spec_clear = "[そして] (とっぱ して くりあ | くりあ | くりあ りんぐ | せいあつ | とつにゅう) [(しろ | だ)]"
+    spec_clear = "[そして] (とっぱ して くりあ | くりあ | くりあ りんぐ | せいあつ | とつにゅう | しんにゅう) [(しろ | だ)]"
 
     spec = f"{spec_start} {spec_tool} ({spec_grenade} {spec_clear} | {spec_clear} {spec_grenade} | {spec_clear})"
     extras = [
@@ -1117,7 +1135,7 @@ class UseDeployable(CompoundRule):
     Speech recognise command team to use a deployable at a location
     """
     # spec = "<color> [team] <hold> deploy <deployable>"
-    spec = "<color> [ちーむ] <hold> <deployable> [を] (つかえ | てんかい [しろ])"
+    spec = "<color> [ちーむ] <hold> <deployable> [を] (つかえ | てんかい [しろ] | おとせ | しまえ)"
     extras = [
         Optional(Choice("color_choice", map_colors), "color", "current"),
         Optional(Choice("hold_choice", map_hold), "hold", "go"),
@@ -1194,8 +1212,8 @@ class NpcTeamRestrain(CompoundRule):
     # spec_1 = "<restrain> (em | them | him | her | [the] target)"
     # spec_2 = "<restrain>"
     spec_start = "<color> [ちーむ]"
-    spec_1 = "(かれ | かのじょ | やつ | あいつ | もくひょう) [を] <restrain> [(しろ | だ)]"
-    spec_2 = "<restrain> [(しろ | だ)]"
+    spec_1 = "(かれ | かのじょ | やつ | あいつ | もくひょう) [(を | に)] <restrain> [(しろ | だ | を かけろ)]"
+    spec_2 = "<restrain> [(しろ | だ | を かけろ)]"
     spec = f"{spec_start} ({spec_1} | {spec_2})"
     extras = [
         Optional(Choice("color_choice", map_colors), "color", "current"),
@@ -1378,6 +1396,7 @@ class YellFreeze(BasicRule):
         Literal("police"),
         Literal("うごくな"),
         Literal("けいさつだ"),
+        Literal("えるえすぴーでぃー だ"),
         Literal("ぶきをすてろ"),
         Literal("てをあげろ"),
         Literal("ひざをつけ"),

@@ -66,6 +66,7 @@ include_files = []
 # include_files.extend(collect_dist_info("webrtcvad_wheels"))
 include_files.extend(grammar_modules())
 include_files.append(("tacspeak/user_settings.py", "tacspeak/user_settings.py"))
+include_files.append(("tacspeak/user_settings.py", "tacspeak/grammar/originalTacspeak_readyornot.py"))
 include_files.append("README.md")
 include_files.append("LICENSE.txt")
 include_files.append(("licenses/pkg_licenses_notices.txt", "licenses/pkg_licenses_notices.txt"))

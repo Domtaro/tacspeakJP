@@ -8,9 +8,11 @@ kaldi_model_*/
 testaudio*/
 cleanaudio*/
 *_retain/
+retain/
 
 
 .*.log
 .debug_grammar*.txt
 test_model_output_*.txt
 /audio.txt
+tacspeak/test_model.py

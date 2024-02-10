@@ -42,7 +42,7 @@ def main():
         WSR_AUDIO_SOURCE_INDEX = (sys.modules["user_settings"]).WSR_AUDIO_SOURCE_INDEX
     except Exception:
         if DEBUG_MODE:
-            print("Not defined or Failed to load `tacspeak/user_settings.py` WSR_AUDIO_SOURCE_INDEX. keeping mic setting default.")
+            print("Not defined or Failed to load `tacspeak/user_settings.py` WSR_AUDIO_SOURCE_INDEX. keeping mic setting in default.")
 
         WSR_AUDIO_SOURCE_INDEX = None
 

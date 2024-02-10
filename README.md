@@ -81,12 +81,18 @@ I named 'JP' but, I guess it can works for any other languages what is supported
 ### ツールのセットアップ・実行  
 1. `user_settings.py` の内容を確認・編集する  
     - WSR_AUDIO_SOURCE_INDEX で使用するマイクを指定できる。どのマイクが何番のインデックスかは、 `tacspeakJP.exe --get_audio_sources` を実行することで確認できる。  
+      - v2024.2.2（v0.2.0.1-jpの次）から、デフォルトでコメントアウト（指定なし）にしています。  
+      - 指定されなかった場合は、何も設定を変えません。（Windows音声認識の設定で指定したマイクのまま）  
 2. grammar の内容を確認・編集する（Ready or Notの場合、デフォルト用として `tacspeak/grammar/_readyornot_jp.py` を同梱）  
     - `grammar_context` にフックするゲームのexeのパス（の一部）を指定する（大文字／小文字区別なし）。  
-    - `ingame_key_bindings` にゲームの自分のキーバインド設定を反映する。  
-    - `map_` で始まる変数に、追加／変更したい言葉があれば反映する。  
-    - `spec` という変数に、追加／変更したい文法（言い回し）があれば反映する（複数個所にあります）。  
-    - `YellFreeze` クラスに、エール（シャウト、降伏呼びかけ）の言葉を好みに応じて追加／変更する。  
+    - `inifile_name` に入っている、`Input.ini` （ReadyOrNotのキー設定ファイル）のパスが正しいことを確認する。  
+      - v2024.2.2（v0.2.0.1-jpの次）から、ここで指定されたファイルから自動でキー設定を拾う機能を追加しました。  
+      - 動作するためには、もしかしたらTacspeakJP.exeを管理者権限で実行する必要があるかもしれません。
+      - うまく自動設定されないときや、手動で変更したい場合は、`ingame_key_bindings.update()` の中身を編集して指定してください。  
+      - また、デバッグモードを有効にして起動すると、最初の方に`-- Ready or Not In-Game keybindings --`の行に挟まれる形で、ツールが取得したゲーム内キー設定の一覧を見ることができます。デバッグモードの使い方は「トラブルシューティング」の項目を参照してください。  
+    - `map_` で始まる変数に、追加／変更したい言葉があれば反映する。（複数個所にあります）  
+    - `spec` という変数に、追加／変更したい文法（言い回し）があれば反映する。（複数個所にあります）  
+    - `YellFreeze` クラスに、エール（シャウト、降伏呼びかけ）の言葉を好みに応じて追加／変更する。（１箇所だけにあります）  
     - そのほか、[Dragonflyのドキュメント](https://dragonfly2.readthedocs.io/en/latest/rules.html) などを参考に、自分用のルールを追加できる。  
 3. `tacspeak.exe` を実行する（ツールとゲームの起動はどちらが先でも構いません。）  
 4. 「ビギニングループ」という音声が聞こえて、"Ready to listen..." の表示で待機したら起動しています。ゲームのウィンドウをアクティブにして試してみてください。  
@@ -105,17 +111,24 @@ I named 'JP' but, I guess it can works for any other languages what is supported
 - 言葉をしゃべり、コマンドが成立した場合、「current team go stack up split」のように認識されたコマンドが表示され、キー入力が行われます。  
 - 言い回しの例（付属の `_readyornot_jp.py` の内容）を以下に示します。  
 ### コマンドのサンプル  
+- いけ → デフォルト命令（いわゆるzキー）
 - うごくな → Freeze!
 - て を あげろ → Freeze!
 - しゅうごう しろ → Fall in
 - にれつ で うしろ に つけ → Fall in, double file
 - だいやもんど たいけい で さいへんせい → Fall in, diamond formation
+- そこ に いけ → Move to there
+- そこ を みて いろ → Cover there
 - はいち に つけ → Stack up split
 - みぎ に てんかい → Stack up on the right
 - すきゃん しろ → Scan the door
 - みらー を つかえ → Use the mirror
 - ぴっきんぐ しろ → Pick the door
+- そこを あけろ → Open the door
+- そこを とじろ → Close the door
+- かばー しろ → Cover the door
 - ぶろっく しろ → Use the wedge
+- うぇっじ を つかえ → Use the wedge
 - あけて とつにゅう しろ → Open and clear
 - しょっとがん で あけて ふらっしゅ で くりあ しろ → Shotgun, flash and clear
 - あけたら がす を なげて せいあつ しろ → Leader, CS and clear
@@ -125,9 +138,9 @@ I named 'JP' but, I guess it can works for any other languages what is supported
 - うしろ を むけ → You, Turn around
 - こっち に こい → You, Move my position
 - そこ で とまれ → You, stop
--  こうそく しろ → restrain
--  あいつ に てーざー を つかえ → Deploy teaser
--  そうさく しろ → Search and secure
+- こうそく しろ → restrain
+- あいつ に てーざー を つかえ → Deploy teaser
+- そうさく しろ → Search and secure
 
 
 ## トラブルシューティング | Troubleshooting (in Japanese only)  
@@ -141,23 +154,23 @@ I named 'JP' but, I guess it can works for any other languages what is supported
 - 言葉は正しいのにコマンドが発動しない  
     - 正しい位置をポイントしていることを確認してください。（ドアに対するコマンドならドアをポイントしていること）  
       ツール側では、「ゲーム内で今どこを見ているか」を判別しません。  
-    - 複数の場面に同じ言葉の並びを設定するとうまくいかない場合があります。  
+    - 同じ言葉の並びを複数のコマンドに設定するとうまくいかない場合があります。  
       例えば、単に「とまれ」とだけ言うと、チームへの停止命令か、動いている民間人への命令か特定できません。  
       どちらかのコマンドに、「そこで とまれ」のように言葉を加えてたりして区別できるようにしてみて下さい。  
-    - 例えば、見かけ上は同じ「しゅうごう」でも、どうやら内部的に違いがあってコマンド発動に影響する場合があるようです。  
+    - 他にも例えば、見かけ上は同じ「しゅうごう」でも、どうやら内部的に違いがあってコマンド発動に影響する場合があるようです。  
       WSRの仕様を把握しきれていないため詳細は不明です。  
       「しゅうごう しろ」のように他の言葉と一緒に言うと改善する場合があります。  
     - 実際にキー入力で実行できないコマンドは動作しません  
       例えば、一部のドアで「左にスタック」が無効になっていたりする場合など  
     - `./tacspeak/user_settings.py` で `DEBUG_MODE = True` を設定して起動することで、ツール単体で動作確認ができます。  
-      ゲームを起動してフォーカスしている必要はなく、キー入力も実際には行われません。  
+      ゲームを起動してアクティブにしている必要はなく、キー入力も実際には行われません。  
       発音の認識結果のほかに、エミュレートされたキーも表示されます。  
 - 認識されるのが遅い  
     - Kaldiエンジンに比べると反応が遅いかもしれません。現状、Windows音声認識を使うことによる限界があります。  
     - エール（手を挙げろ！など）のように素早く発動することが重要なコマンドは、そもそも不向きです。  
-      現実で言葉を言い終わってからようやくゲーム内でコマンドを発動するという仕組み上、発動できる速さに限界があります。  
-      これはKaldi Active Grammarで応答性を向上させた、本家Tacspeakでさえも同様です。  
-      咄嗟のエールなどは最初の１回は手動でキー入力で出すことをお勧めします。  
+      - 現実で言葉を言い終わってからようやくゲーム内でコマンドを発動するという仕組み上、発動できる速さに限界があります。  
+      - これはKaldi Active Grammarで応答性を向上させた、本家Tacspeakでさえも同様です。  
+      - 咄嗟のエールなどは最初の１回は手動でキー入力で出すことをお勧めします。  
 - そのほかの制限  
     - 視線の手前と奥に二つドアがある場合、どちらのドアへの指示かを決める入力が先頭に追加されますが、付属のgrammarではそのパターンに対応していません。  
       しかし、あなたの手で改良すれば対応可能かもしれません。  
@@ -180,7 +193,10 @@ I named 'JP' but, I guess it can works for any other languages what is supported
     - (.venv)に切り替わっていること  
     - `py -m pip install -r requirements.txt` （前提パッケージに変更が無ければ２回目以降不要）  
     - `py setup.py build`  
-
+- ビルド後、起動しようとすると'CLSIDToClassMap'に関するエラーが出てアベンドすることがあった。
+  - %TEMP%\gen_py 下を全削除することで解消した。
+  - 正確な原因は不明（世の中的には知られた事象のようではある）
+  - 根本対策は未定（発生原理を理解していないため）
 
 ## モチベーション | Motivation  
 
@@ -205,10 +221,12 @@ I would like to express my thanks and respect to jwebmeister, the author of the 
 
 - まず、このプロジェクトは個人の趣味です。サポート内容や期間については一切お約束できないことをご了承ください。  
   This project is personal. I can not guarantee any support, but I would to help you as I can if you need.  
-- 今のところ、プログラム本体にこれ以上変更を加える予定はありません。  
-  I have no plan to change any more the main programs for now.  
+- 今のところ、プログラム本体にこれ以上変更を加える具体的な計画はありません。  
+  I have no detailed plan to change any more the main programs for now.  
 - あるとすれば、Ready or Not向け付属grammarの改良、またはオリジナルTacspeakの変更で適用すべきものの反映などを想定しています。  
   If some changes happen on original Tacspeak, I would check if it need to be applied to my project. And also I may update the grammar contained.  
+- 何か機能を思いついたら実装するかもしれません。  
+  I may add something new if I got ideas.
 - その他、使い方などの問い合わせに適宜対応します。  
   I will reply to your questions/comments as I can.  
 - このプロジェクトはオープンソースです。ライセンスの範囲内で誰でも自由に改変できます。私への伺い立て等も不要です。  
