@@ -1,0 +1,170 @@
+Grammar:  17 ( 17,   0) rules, 1877 elements (110 avg)     Grammar(ReadyOrNot)
+  Rule:   58  ExecuteOrCancelHeldOrder(ExecuteOrCancelHeldOrder)
+  Rule:   19  SelectTeam(SelectTeam)
+  Rule:    8  SelectColor(SelectColor)
+  Rule:  137  DoorOptions(DoorOptions)
+  Rule:   70  WedgeIt(WedgeIt)
+  Rule:   65  RemoveTheWedge(RemoveTheWedge)
+  Rule:   67  UseTheWand(UseTheWand)
+  Rule:  134  StackUp(StackUp)
+  Rule:  390  BreachAndClear(BreachAndClear)
+  Rule:   54  PickLock(PickLock)
+  Rule:  151  GroundOptions(GroundOptions)
+  Rule:  276  FallIn(FallIn)
+  Rule:   92  UseDeployable(UseDeployable)
+  Rule:  114  NpcPlayerInteract(NpcPlayerInteract)
+  Rule:   69  NpcTeamRestrain(NpcTeamRestrain)
+  Rule:  112  NpcTeamDeploy(NpcTeamDeploy)
+  Rule:   61  ExecuteDefault(ExecuteDefault)
+Grammar:   2 (  2,   0) rules,   17 elements (  8 avg)     Grammar(ReadyOrNot_priority)
+  Rule:   14  YellFreeze(YellFreeze)
+  Rule:    3  NoiseSink(NoiseSink)
+
+
+---ExecuteOrCancelHeldOrder---
+(([((gold) | (blue) | (red) | (ごーるど) | (ぜんいん) | (れっど) | (ぶるー))] [ちーむ] ((execute) | (cancel) | ((go [go go])) | ((いけ いけ [いけ])) | (やれ) | ((じっこう [しろ])) | (やめろ) | ((きゃんせる [(だ | しろ)])) | ((ちゅうし [(だ | しろ)])))))
+---
+<color> [ちーむ] <execute_or_cancel>
+color=Optional(['gold', 'blue', 'red', 'ごーるど', 'ぜんいん', 'れっど', 'ぶるー'])
+execute_or_cancel=['execute', 'cancel', 'go [go go]', 'いけ いけ [いけ]', 'やれ', 'じっこう [しろ]', 'やめろ', 'きゃんせる [(だ | しろ)]', 'ちゅうし [(だ | しろ)]']
+------------
+
+---SelectTeam---
+(([((gold) | (blue) | (red) | (ごーるど) | (ぜんいん) | (れっど) | (ぶるー))] ちーむ))
+---
+<color> ちーむ
+color=Optional(['gold', 'blue', 'red', 'ごーるど', 'ぜんいん', 'れっど', 'ぶるー'])
+------------
+
+---SelectColor---
+(((blue) | (red) | (gold)))
+---
+<color>
+color=['blue', 'red', 'gold']
+------------
+
+---DoorOptions---
+(([((gold) | (blue) | (red) | (ごーるど) | (ぜんいん) | (れっど) | (ぶるー))] [ちーむ] [(((on my (mark | order | command))) | (([おれ の] (あいず | あいづ) (で | したら | を まって))))] [((trapped) | (とらっぷ の) | (あの) | (その))] [(どあ | つうろ | へや | そこ)] [(に | を)] (((mirror [under])) | ((wand [under])) | (disarm) | (wedge) | (block) | (cover) | (open) | (close) | (みらー) | (みらーがん) | (わんど) | (おぷてぃわんど) | (うぇっじ) | (じゃまー) | (かばー) | (えんご) | (あけ ろ) | (ひらけ) | (あけ て みろ) | (ひらいて みろ) | (とじ ろ) | (しめ ろ) | (scan) | (slide) | (pie) | (peek) | (すらいど) | (すきゃん) | (ぱい) | (かってぃんぐぱい) | (ぴーく) | (のぞけ) | (のぞ け)) [(を つかえ | しろ)]))
+---
+<color> [ちーむ] <hold> <trapped> [(どあ | つうろ| へや | そこ)] [(に | を)] <door_option> [(を つかえ | しろ)]
+color=Optional(['gold', 'blue', 'red', 'ごーるど', 'ぜんいん', 'れっど', 'ぶるー'])
+hold=Optional(['on my (mark | order | command)', '[おれ の] (あいず | あいづ) (で | したら | を まって)'])
+door_option=['mirror [under]', 'wand [under]', 'disarm', 'wedge', 'block', 'cover', 'open', 'close', 'みらー', 'みらーがん', 'わんど', 'おぷてぃわんど', 'うぇっじ', 'じゃまー', 'かばー', 'えんご', 'あけ ろ', 'ひらけ', 'あけ て みろ', 'ひらいて みろ', 'とじ ろ', 'しめ ろ', 'scan', 'slide', 'pie', 'peek', 'すらいど', 'すきゃん', 'ぱい', 'かってぃんぐぱい', 'ぴーく', 'のぞけ', 'のぞ け']
+trapped=Optional(['trapped', 'とらっぷ の', 'あの', 'その'])
+------------
+
+---WedgeIt---
+(([((gold) | (blue) | (red) | (ごーるど) | (ぜんいん) | (れっど) | (ぶるー))] [ちーむ] [(((on my (mark | order | command))) | (([おれ の] (あいず | あいづ) (で | したら | を まって))))] [((trapped) | (とらっぷ の) | (あの) | (その))] [(どあ | つうろ)] [(を | の | に)] (うぇっじ | じゃまー | へいさ | ふうさ | ふさげ | ぶろっく) [(しろ | を つかえ)]))
+---
+<color> [ちーむ] <hold> <trapped> [(どあ | つうろ)] [(を | の | に)] (うぇっじ | じゃまー | へいさ | ふうさ | ふさげ | ぶろっく) [(しろ | を つかえ)]
+color=Optional(['gold', 'blue', 'red', 'ごーるど', 'ぜんいん', 'れっど', 'ぶるー'])
+hold=Optional(['on my (mark | order | command)', '[おれ の] (あいず | あいづ) (で | したら | を まって)'])
+trapped=Optional(['trapped', 'とらっぷ の', 'あの', 'その'])
+------------
+
+---RemoveTheWedge---
+(([((gold) | (blue) | (red) | (ごーるど) | (ぜんいん) | (れっど) | (ぶるー))] [ちーむ] [(((on my (mark | order | command))) | (([おれ の] (あいず | あいづ) (で | したら | を まって))))] [((trapped) | (とらっぷ の) | (あの) | (その))] [(どあ | つうろ)] [の] (うぇっじ | じゃまー | ブロック) [を] (はずせ | かいじょ しろ)))
+---
+<color> [ちーむ] <hold> <trapped> [(どあ | つうろ)] [の] (うぇっじ | じゃまー | ブロック) [を] (はずせ | かいじょ しろ)
+color=Optional(['gold', 'blue', 'red', 'ごーるど', 'ぜんいん', 'れっど', 'ぶるー'])
+hold=Optional(['on my (mark | order | command)', '[おれ の] (あいず | あいづ) (で | したら | を まって)'])
+trapped=Optional(['trapped', 'とらっぷ の', 'あの', 'その'])
+------------
+
+---UseTheWand---
+(([((gold) | (blue) | (red) | (ごーるど) | (ぜんいん) | (れっど) | (ぶるー))] [ちーむ] [(((on my (mark | order | command))) | (([おれ の] (あいず | あいづ) (で | したら | を まって))))] [((trapped) | (とらっぷ の) | (あの) | (その))] [(どあ | つうろ | へや)] [(に | を)] (みらー | みらーがん | わんど | おぷてぃわんど) (を つかえ | しろ)))
+---
+<color> [ちーむ] <hold> <trapped> [(どあ | つうろ | へや)] [(に | を)] (みらー | みらーがん | わんど | おぷてぃわんど) (を つかえ | しろ)
+color=Optional(['gold', 'blue', 'red', 'ごーるど', 'ぜんいん', 'れっど', 'ぶるー'])
+hold=Optional(['on my (mark | order | command)', '[おれ の] (あいず | あいづ) (で | したら | を まって)'])
+trapped=Optional(['trapped', 'とらっぷ の', 'あの', 'その'])
+------------
+
+---StackUp---
+(([((gold) | (blue) | (red) | (ごーるど) | (ぜんいん) | (れっど) | (ぶるー))] [ちーむ] [(((on my (mark | order | command))) | (([おれ の] (あいず | あいづ) (で | したら | を まって))))] ((((split) | (left) | (right) | (auto) | (さゆう) | (りょうがわ) | (りょう がわ) | (りょうわき) | (りょうほう) | ((ひだり [がわ])) | ((みぎ [がわ])) | (まかせ る)) [((に | へ) つけ)]) | (((split) | (left) | (right) | (auto) | (さゆう) | (りょうがわ) | (りょう がわ) | (りょうわき) | (りょうほう) | ((ひだり [がわ])) | ((みぎ [がわ])) | (まかせ る)) [(に | へ)] (てんかい | はいち | すたっく) [しろ]) | ((てんかい | はいち | いち | (すたっく [あっぷ])) [(しろ | に つけ)]))))
+---
+<color> [ちーむ] <hold> (<side> [(に | へ) つけ] | <side> [(に | へ)] (てんかい | はいち | すたっく) [しろ] | (てんかい | はいち | いち | すたっく [あっぷ]) [しろ | に つけ])
+color=Optional(['gold', 'blue', 'red', 'ごーるど', 'ぜんいん', 'れっど', 'ぶるー'])
+hold=Optional(['on my (mark | order | command)', '[おれ の] (あいず | あいづ) (で | したら | を まって)'])
+side=['split', 'left', 'right', 'auto', 'さゆう', 'りょうがわ', 'りょう がわ', 'りょうわき', 'りょうほう', 'ひだり [がわ]', 'みぎ [がわ]', 'まかせ る']
+------------
+
+---BreachAndClear---
+(([((gold) | (blue) | (red) | (ごーるど) | (ぜんいん) | (れっど) | (ぶるー))] [ちーむ] [(((on my (mark | order | command))) | (([おれ の] (あいず | あいづ) (で | したら | を まって))))] [((open) | (move in) | ((kick [it] [down])) | (kick the door down) | ((shotgun | shot e)) | (c two) | (([battering] ram [it])) | (((((leader | lead) will) | (wait for (my | me to))) (open | breach))) | (あけ ろ) | (あけ て) | (ひらけ) | (ひら いて) | (はい れ) | (はいって) | (すすめ) | (とつにゅう) | (けやぶれ) | (けやぶって) | (しーつー) | (ちゃーじ) | (ばくやく) | (はじょうつい) | (らむ) | (りーだー) | ((おれ [に] [(つづいて | つづけて)])) | (([おれ が] あけ たら)))] [(を | で)] [(つか え | つかって | やぶ れ | やぶって | あけ て | あけ ろ | とっぱ しろ | とっぱ して | して)] (([(((bang | flash bang | flash)) | (stinger) | ((cs | gas | cs gas)) | (([the] (fourty mil | launcher))) | (((((leader | lead) will) | (wait for (my | me to))) (grenade | flash bang | bang | flash | stinger | cs | gas | cs gas | fourty mil | launcher))) | ((ばん | ふらっしゅ ばん | ふらっしゅ)) | ((せんこう [しゅりゅうだん])) | ((しーえす | がす | しーえす がす)) | (さいるい がす) | (らんちゃー) | (りーだー) | (([おれ] [(の | を)] あいず [(で | を まて)])) | (([おれ] [(の | を)] あいづ [(で | を まて)])))] [(を | で)] [(つかって | なげ て | てんかい して)] [そして] (とっぱ して くりあ | くりあ | くりあ りんぐ | せいあつ | とつにゅう | しんにゅう) [(しろ | だ)]) | ([そして] (とっぱ して くりあ | くりあ | くりあ りんぐ | せいあつ | とつにゅう | しんにゅう) [(しろ | だ)] [(((bang | flash bang | flash)) | (stinger) | ((cs | gas | cs gas)) | (([the] (fourty mil | launcher))) | (((((leader | lead) will) | (wait for (my | me to))) (grenade | flash bang | bang | flash | stinger | cs | gas | cs gas | fourty mil | launcher))) | ((ばん | ふらっしゅ ばん | ふらっしゅ)) | ((せんこう [しゅりゅうだん])) | ((しーえす | がす | しーえす がす)) | (さいるい がす) | (らんちゃー) | (りーだー) | (([おれ] [(の | を)] あいず [(で | を まて)])) | (([おれ] [(の | を)] あいづ [(で | を まて)])))] [(を | で)] [(つかって | なげ て | てんかい して)]) | ([そして] (とっぱ して くりあ | くりあ | くりあ りんぐ | せいあつ | とつにゅう | しんにゅう) [(しろ | だ)]))))
+---
+<color> [ちーむ] <hold> [<tool>] [(を | で)] [(つか え | つかって | やぶ れ | やぶって | あけ て | あけ ろ | とっぱ しろ | とっぱ して | して)] (<grenade> [(を | で)] [(つかって | なげ て | てんかい して)] [そして] (とっぱ して くりあ | くりあ | くりあ りんぐ | せいあつ | とつにゅう | しんにゅう) [(しろ | だ)] | [そして] (とっぱ して くりあ | くりあ | くりあ りんぐ | せいあつ | とつにゅう | しんにゅう) [(しろ | だ)] <grenade> [(を | で)] [(つかって | なげ て | てんかい して)] | [そして] (とっぱ して くりあ | くりあ | くりあ りんぐ | せいあつ | とつにゅう | しんにゅう) [(しろ | だ)])
+color=Optional(['gold', 'blue', 'red', 'ごーるど', 'ぜんいん', 'れっど', 'ぶるー'])
+hold=Optional(['on my (mark | order | command)', '[おれ の] (あいず | あいづ) (で | したら | を まって)'])
+tool=['open', 'move in', 'kick [it] [down]', 'kick the door down', '(shotgun | shot e)', 'c two', '[battering] ram [it]', '((leader | lead) will | wait for (my | me to)) (open | breach)', 'あけ ろ', 'あけ て', 'ひらけ', 'ひら いて', 'はい れ', 'はいって', 'すすめ', 'とつにゅう', 'けやぶれ', 'けやぶって', 'しーつー', 'ちゃーじ', 'ばくやく', 'はじょうつい', 'らむ', 'りーだー', 'おれ [に] [(つづいて | つづけて)]', '[おれ が] あけ たら']
+grenade=Optional(['(bang | flash bang | flash)', 'stinger', '(cs | gas | cs gas)', '[the] (fourty mil | launcher)', '((leader | lead) will | wait for (my | me to)) (grenade | flash bang | bang | flash | stinger | cs | gas | cs gas | fourty mil | launcher)', '(ばん | ふらっしゅ ばん | ふらっしゅ)', 'せんこう [しゅりゅうだん]', '(しーえす | がす | しーえす がす)', 'さいるい がす', 'らんちゃー', 'りーだー', '[おれ] [(の | を)] あいず [(で | を まて)]', '[おれ] [(の | を)] あいづ [(で | を まて)]'])
+------------
+
+---PickLock---
+(([((gold) | (blue) | (red) | (ごーるど) | (ぜんいん) | (れっど) | (ぶるー))] [ちーむ] [(((on my (mark | order | command))) | (([おれ の] (あいず | あいづ) (で | したら | を まって))))] [((どあ | かぎ) を)] (ぴっきんぐ | ぴっく | かいじょう) [(しろ | だ)]))
+---
+<color> [ちーむ] <hold> [(どあ | かぎ) を] (ぴっきんぐ | ぴっく | かいじょう) [(しろ | だ)]
+color=Optional(['gold', 'blue', 'red', 'ごーるど', 'ぜんいん', 'れっど', 'ぶるー'])
+hold=Optional(['on my (mark | order | command)', '[おれ の] (あいず | あいづ) (で | したら | を まって)'])
+------------
+
+---GroundOptions---
+(([((gold) | (blue) | (red) | (ごーるど) | (ぜんいん) | (れっど) | (ぶるー))] [ちーむ] [(((on my (mark | order | command))) | (([おれ の] (あいず | あいづ) (で | したら | を まって))))] (((move (([over] (here | there)) | ([to] that (location | position))))) | ((cover (([over] (here | there)) | (that (location | position))))) | (((hold | halt | stop) [(position | movement)])) | ((resume [movement])) | (((secure | search) [the] (area | room))) | (((search for | collect | secure) evidence)) | (((そこ | あそこ) (に | へ) いけ)) | (([(そこ を | あそこ を)] みて いろ)) | (([(そこ を | あそこ を)] みはって いろ)) | (([(そこ を | あそこ を)] かんし しろ)) | (とまれ) | (とまる) | (まて) | ((そうさく [しろ])) | ((かくほ [しろ])))))
+---
+<color> [ちーむ] <hold> <ground_option>
+color=Optional(['gold', 'blue', 'red', 'ごーるど', 'ぜんいん', 'れっど', 'ぶるー'])
+hold=Optional(['on my (mark | order | command)', '[おれ の] (あいず | あいづ) (で | したら | を まって)'])
+ground_option=['move ([over] (here | there) | [to] that (location | position))', 'cover ([over] (here | there) | that (location | position))', '(hold | halt | stop) [(position | movement)]', 'resume [movement]', '(secure | search) [the] (area | room)', '(search for | collect | secure) evidence', '(そこ | あそこ) (に | へ) いけ', '[(そこ を| あそこ を)] みて いろ', '[(そこ を| あそこ を)] みはって いろ', '[(そこ を| あそこ を)] かんし しろ', 'とまれ', 'とまる', 'まて', 'そうさく [しろ]', 'かくほ [しろ]']
+------------
+
+---FallIn---
+((([((gold) | (blue) | (red) | (ごーるど) | (ぜんいん) | (れっど) | (ぶるー))] [ちーむ] [(((on my (mark | order | command))) | (([おれ の] (あいず | あいづ) (で | したら | を まって))))] [(((single file) | (double file) | ((diamond [formation])) | ((wedge [formation])) | (いちれつ) | (しんぐる) | (にれつ) | (だぶる) | (だいあもんど) | (だいやもんど) | (うぇっじ) | (くさびがた) | (くさび)) [(たいけい | ふぉーめーしょん | ふぉーむ)] [(に | だ | で)])] (さいへんせい | しゅうけつ | さいしゅうけつ | しゅうごう) [しろ]) | ([((gold) | (blue) | (red) | (ごーるど) | (ぜんいん) | (れっど) | (ぶるー))] [ちーむ] [(((on my (mark | order | command))) | (([おれ の] (あいず | あいづ) (で | したら | を まって))))] [(((single file) | (double file) | ((diamond [formation])) | ((wedge [formation])) | (いちれつ) | (しんぐる) | (にれつ) | (だぶる) | (だいあもんど) | (だいやもんど) | (うぇっじ) | (くさびがた) | (くさび)) [(たいけい | ふぉーめーしょん | ふぉーむ)] [(に | だ | で)])] (あつま れ | あつま る | もど れ | もど る | もどって こい | ついて こい)) | ([((gold) | (blue) | (red) | (ごーるど) | (ぜんいん) | (れっど) | (ぶるー))] [ちーむ] [(((on my (mark | order | command))) | (([おれ の] (あいず | あいづ) (で | したら | を まって))))] [(((single file) | (double file) | ((diamond [formation])) | ((wedge [formation])) | (いちれつ) | (しんぐる) | (にれつ) | (だぶる) | (だいあもんど) | (だいやもんど) | (うぇっじ) | (くさびがた) | (くさび)) [(たいけい | ふぉーめーしょん | ふぉーむ)] [(に | だ | で)])] (うしろ | あと) に (つけ | つづけ | こい))))
+---
+(<color> [ちーむ] <hold> [<formation> [(たいけい | ふぉーめーしょん | ふぉーむ)] [(に | だ | で)]] (さいへんせい | しゅうけつ | さいしゅうけつ | しゅうごう) [しろ] | <color> [ちーむ] <hold> [<formation> [(たいけい | ふぉーめーしょん | ふぉーむ)] [(に | だ | で)]] (あつま れ | あつま る | もど れ | もど る | もどって こい | ついて こい) | <color> [ちーむ] <hold> [<formation> [(たいけい | ふぉーめーしょん | ふぉーむ)] [(に | だ | で)]] (うしろ | あと) に (つけ | つづけ | こい))
+color=Optional(['gold', 'blue', 'red', 'ごーるど', 'ぜんいん', 'れっど', 'ぶるー'])
+hold=Optional(['on my (mark | order | command)', '[おれ の] (あいず | あいづ) (で | したら | を まって)'])
+formation=['single file', 'double file', 'diamond [formation]', 'wedge [formation]', 'いちれつ', 'しんぐる', 'にれつ', 'だぶる', 'だいあもんど', 'だいやもんど', 'うぇっじ', 'くさびがた', 'くさび']
+------------
+
+---UseDeployable---
+(([((gold) | (blue) | (red) | (ごーるど) | (ぜんいん) | (れっど) | (ぶるー))] [ちーむ] [(((on my (mark | order | command))) | (([おれ の] (あいず | あいづ) (で | したら | を まって))))] (((bang | flash bang | flash)) | (stinger) | ((cs | gas | cs gas)) | (chem light) | (shield) | ((ばん | ふらっしゅ ばん | ふらっしゅ)) | ((せんこう [しゅりゅうだん])) | ((しーえす | がす | しーえす がす)) | (けみらいと) | (らいと すてぃっく) | (らいと) | (たて) | (しーるど)) [を] (つかえ | (てんかい [しろ]) | おとせ | しまえ)))
+---
+<color> [ちーむ] <hold> <deployable> [を] (つかえ | てんかい [しろ] | おとせ | しまえ)
+color=Optional(['gold', 'blue', 'red', 'ごーるど', 'ぜんいん', 'れっど', 'ぶるー'])
+hold=Optional(['on my (mark | order | command)', '[おれ の] (あいず | あいづ) (で | したら | を まって)'])
+deployable=['(bang | flash bang | flash)', 'stinger', '(cs | gas | cs gas)', 'chem light', 'shield', '(ばん | ふらっしゅ ばん | ふらっしゅ)', 'せんこう [しゅりゅうだん]', '(しーえす | がす | しーえす がす)', 'けみらいと', 'らいと すてぃっく', 'らいと', 'たて', 'しーるど']
+------------
+
+---NpcPlayerInteract---
+(([(おまえ | きみ | あんた | そこ で)] (((move [(here | there)])) | (((move | come) to (me | my position))) | (come here) | ((stop [(there | moving | movement)])) | (turn around) | ((move to [the] exit)) | (get out of here) | (((get | move) outside)) | (((そこ | そっち) (に | へ) うごけ)) | (((おれ の ほう | こっち) (に | へ) (こい | うごけ))) | (([そこ で] とまれ)) | (([そこ で] とまる)) | (まわれ) | (まわる) | (ふりむけ) | (うしろ を むけ) | ((ここ (を | から) (でろ | でる))) | (((でぐち | そと) (に | へ | まで) (いけ | でろ | にげろ | はしれ))) | (だっしゅつ しろ))))
+---
+[(おまえ | きみ | あんた | そこ で)] <interaction>
+interaction=['move [(here | there)]', '(move | come) to (me | my position)', 'come here', 'stop [(there | moving | movement)]', 'turn around', 'move to [the] exit', 'get out of here', '(get | move) outside', '(そこ | そっち) (に | へ) うごけ', '(おれ の ほう | こっち) (に | へ) (こい | うごけ)', '[そこ で] とまれ', '[そこ で] とまる', 'まわれ', 'まわる', 'ふりむけ', 'うしろ を むけ', 'ここ (を | から) (でろ | でる)', '(でぐち | そと) (に | へ | まで) (いけ | でろ | にげろ | はしれ)', 'だっしゅつ しろ']
+------------
+
+---NpcTeamRestrain---
+(([((gold) | (blue) | (red) | (ごーるど) | (ぜんいん) | (れっど) | (ぶるー))] [ちーむ] (((かれ | かのじょ | やつ | あいつ | もくひょう) [(を | に)] ((restrain) | (arrest) | (たいほ) | (こうそく) | (しばれ) | (てじょう)) [(しろ | だ | を かけろ)]) | (((restrain) | (arrest) | (たいほ) | (こうそく) | (しばれ) | (てじょう)) [(しろ | だ | を かけろ)]))))
+---
+<color> [ちーむ] ((かれ | かのじょ | やつ | あいつ | もくひょう) [(を | に)] <restrain> [(しろ | だ | を かけろ)] | <restrain> [(しろ | だ | を かけろ)])
+color=Optional(['gold', 'blue', 'red', 'ごーるど', 'ぜんいん', 'れっど', 'ぶるー'])
+restrain=['restrain', 'arrest', 'たいほ', 'こうそく', 'しばれ', 'てじょう']
+------------
+
+---NpcTeamDeploy---
+(([((gold) | (blue) | (red) | (ごーるど) | (ぜんいん) | (れっど) | (ぶるー))] [ちーむ] (((かれ | かのじょ | やつ | あいつ | こいつ | もくひょう) (に | を) ((taser) | (tase) | (pepper spray) | (pepper ball) | ((bean [bag])) | (melee) | (violence) | (てーざー) | (てーざー がん) | (ぺっぱー すぷれー) | (ぺっぱー ぼーる) | (びーんばっぐ) | (なぐれ) | (めれー)) [を つかえ]) | (((taser) | (tase) | (pepper spray) | (pepper ball) | ((bean [bag])) | (melee) | (violence) | (てーざー) | (てーざー がん) | (ぺっぱー すぷれー) | (ぺっぱー ぼーる) | (びーんばっぐ) | (なぐれ) | (めれー)) [を] (かれ | かのじょ | やつ | あいつ | こいつ | もくひょう) [に] [つかえ]))))
+---
+<color> [ちーむ] ((かれ | かのじょ | やつ | あいつ | こいつ | もくひょう) (に | を) <deployable> [を つかえ] | <deployable> [を] (かれ | かのじょ | やつ | あいつ | こいつ | もくひょう) [に] [つかえ])
+color=Optional(['gold', 'blue', 'red', 'ごーるど', 'ぜんいん', 'れっど', 'ぶるー'])
+deployable=['taser', 'tase', 'pepper spray', 'pepper ball', 'bean [bag]', 'melee', 'violence', 'てーざー', 'てーざー がん', 'ぺっぱー すぷれー', 'ぺっぱー ぼーる', 'びーんばっぐ', 'なぐれ', 'めれー']
+------------
+
+---ExecuteDefault---
+(([((gold) | (blue) | (red) | (ごーるど) | (ぜんいん) | (れっど) | (ぶるー))] [ちーむ] [(((on my (mark | order | command))) | (([おれ の] (あいず | あいづ) (で | したら | を まって))))] ((でふぉると | おい | たいおう | いけ | こい) | ((あれ | それ | これ) [(だ | を | が)])) [(しろ | や れ)]))
+---
+<color> [ちーむ] <hold>  ((でふぉると | おい | たいおう | いけ | こい) | (あれ | それ | これ) [(だ | を | が)]) [(しろ | や れ)]
+color=Optional(['gold', 'blue', 'red', 'ごーるど', 'ぜんいん', 'れっど', 'ぶるー'])
+hold=Optional(['on my (mark | order | command)', '[おれ の] (あいず | あいづ) (で | したら | を まって)'])
+------------
+
+(freeze | hands | drop | drop it | police | うごくな | けいさつだ | えるえすぴーでぃー だ | ぶきをすてろ | てをあげろ | ひざをつけ | ひざまずけ | ふせろ)
+
+((<Dictation()>))

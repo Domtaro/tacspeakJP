@@ -83,7 +83,8 @@ I named 'JP' but, I guess it can works for any other languages what is supported
     - WSR_AUDIO_SOURCE_INDEX で使用するマイクを指定できる。どのマイクが何番のインデックスかは、 `tacspeakJP.exe --get_audio_sources` を実行することで確認できる。  
       - v2024.2.2（v0.2.0.1-jpの次）から、デフォルトでコメントアウト（指定なし）にしています。  
       - 指定されなかった場合は、何も設定を変えません。（Windows音声認識の設定で指定したマイクのまま）  
-2. grammar の内容を確認・編集する（Ready or Notの場合、デフォルト用として `tacspeak/grammar/_readyornot_jp.py` を同梱）  
+2. grammar（ルール） の内容を確認・編集する（Ready or Notの場合、デフォルト用として `tacspeak/grammar/_readyornot_jp.py` を同梱）  
+   【 よく分からない場合は、いったん触らずにそのまま使ってみてください。 】  
     - `grammar_context` にフックするゲームのexeのパス（の一部）を指定する（大文字／小文字区別なし）。  
     - `inifile_name` に入っている、`Input.ini` （ReadyOrNotのキー設定ファイル）のパスが正しいことを確認する。  
       - v2024.2.2（v0.2.0.1-jpの次）から、ここで指定されたファイルから自動でキー設定を拾う機能を追加しました。  
@@ -99,7 +100,7 @@ I named 'JP' but, I guess it can works for any other languages what is supported
     - マイクに喋ると、認識された音声が文字で表示されます。誤認識のチェックなどができます  
     - 起動時の「ビギニングループ」の音声は、Dragonflyにハードコーディングされた部分で再生されているので設定等でオフにはできません。音量ミキサーでアプリの音量を0にすれば聞こえなくなるかもしれません  
     - デバッグモードを使えば、ゲームを起動せずにテストすることもできます。詳細は「トラブルシューティング」の項目を参照してください。  
-5. Ctrl+C または 右上×で終了する  
+5. 使い終わったら、Ctrl+C または 右上×で終了する  
 
 ### **【注意！】**  
 `./tacspeak/user_settings.py` と `./tacspeak/grammar/_*.py` は自動で読み込まれます。  
@@ -109,7 +110,29 @@ I named 'JP' but, I guess it can works for any other languages what is supported
 ## 基本的な使い方（Ready or Notで説明） | Basic usage (in Japanese only)  
 
 - 言葉をしゃべり、コマンドが成立した場合、「current team go stack up split」のように認識されたコマンドが表示され、キー入力が行われます。  
-- 言い回しの例（付属の `_readyornot_jp.py` の内容）を以下に示します。  
+- 使えるアクション（コマンド）と、それに対応する言葉は、デバッグモードを使って確認できます。  
+  ### 以下の手順で確認できるほか、あらかじめ付属の「Ready or Not用デフォルトgrammar」で出力したものを `sample_grammar_readyornot.txt` として同梱しています。  
+  1. 「トラブルシューティング」の項目を参考に、デバッグモードを有効にしてTacspeakJPを起動してください。
+  2. `Tacspeak.exe` と同じフォルダに、`.debug_grammar_readyornot.txt` というファイルが生成されます。
+  3. その中身がアクション（コマンド）と、それを発動するための言葉のリストになっています。任意のテキストエディタ―などで開いてみて下さい。
+  4. 見かたは次の通りです。下の画像も合わせて見てください。  
+      - ファイルの先頭に、「Rule:～」で始まる行が複数あると思います。これがすなわちアクション（コマンド）の一覧です。  
+        例えば「ExecuteOrCancelHeldOrder(ExecuteOrCancelHeldOrder)」は、ホールド状態の命令に対して、「実行」あるいは「キャンセル」を指示するアクションに該当します。  
+      - それより下は、次の構造の記述が並んでいきます。  
+        \---①アクション名---  
+        ②全パターンを展開したもの  
+        \---  
+        ③基本構文  
+        ④変数１  
+        　変数２  
+        　：  
+        \------------  
+      - 主に見てほしいのは③です。  
+        「③を言うと①が発動する。さらに各単語などには④のバリエーションがある」  
+        というイメージです。  
+  ![tacspeakJP_commandList_sample_3_2](https://github.com/Domtaro/tacspeakJP/assets/143232038/937ec54f-96e2-49d4-b4be-be74263de991)  
+- grammar（ルール）を自分でカスタマイズしている場合でも、その内容で一覧が生成されるはずです。  
+- もう少し具体的な例（付属の `_readyornot_jp.py` の内容）についても以下に示します。  
 ### コマンドのサンプル  
 - いけ → デフォルト命令（いわゆるzキー）
 - うごくな → Freeze!

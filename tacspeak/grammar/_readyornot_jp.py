@@ -247,8 +247,8 @@ map_execute_or_cancels = {
     "やれ": "execute",
     "じっこう [しろ]": "execute", 
     "やめろ": "cancel",
-    "きゃんせる [だ | しろ]": "cancel",
-    "ちゅうし [だ | しろ]": "cancel",
+    "きゃんせる [(だ | しろ)]": "cancel",
+    "ちゅうし [(だ | しろ)]": "cancel",
 }
 map_colors = {
     "gold": "gold",
