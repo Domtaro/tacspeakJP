@@ -84,7 +84,7 @@ I named 'JP' but, I guess it can works for any other languages what is supported
       - v2024.2.2（v0.2.0.1-jpの次）から、デフォルトでコメントアウト（指定なし）にしています。  
       - 指定されなかった場合は、何も設定を変えません。（Windows音声認識の設定で指定したマイクのまま）  
 2. grammar（ルール） の内容を確認・編集する（Ready or Notの場合、デフォルト用として `tacspeak/grammar/_readyornot_jp.py` を同梱）  
-   【 よく分からない場合は、いったん触らずにそのまま使ってみてください。 】  
+   ### よく分からない場合は、いったん触らずにそのまま使ってみてください。  
     - `grammar_context` にフックするゲームのexeのパス（の一部）を指定する（大文字／小文字区別なし）。  
     - `inifile_name` に入っている、`Input.ini` （ReadyOrNotのキー設定ファイル）のパスが正しいことを確認する。  
       - v2024.2.2（v0.2.0.1-jpの次）から、ここで指定されたファイルから自動でキー設定を拾う機能を追加しました。  
