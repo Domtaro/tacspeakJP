@@ -1,4 +1,4 @@
-DEBUG_MODE = False                              # enables additional logging, and if properly setup in the grammar module:
+DEBUG_MODE = True                              # enables additional logging, and if properly setup in the grammar module:
                                                 # - enables module without needing the app in focus, i.e. AppContext()
                                                 # - actions only print to console, they don't press virtual keys
 DEBUG_HEAVY_DUMP_GRAMMAR = False                # expensive on memory, don't set this to True unless you're sure
