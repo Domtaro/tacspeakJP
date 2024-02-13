@@ -81,7 +81,8 @@ def main():
         setup_loggers()
 
     # Set any configuration options here as keyword arguments.
-    if DEBUG_MODE:
+    # if DEBUG_MODE:
+    if False:
         engine = get_engine('sapi5inproc', retain_dir="./retain/")
     else:
         engine = get_engine('sapi5inproc')
