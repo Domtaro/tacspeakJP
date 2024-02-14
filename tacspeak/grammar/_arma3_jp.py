@@ -142,6 +142,17 @@ ingame_key_bindings = {
     "cmd_form_line": ("8", "7"),
     "cmd_form_file": ("8", "8"),
     "cmd_form_diamond": ("8", "9"),
+
+    "cmd_radio_alpha": ("0", "0", "1"),
+    "cmd_radio_bravo": ("0", "0", "2"),
+    "cmd_radio_charlie": ("0", "0", "3"),
+    "cmd_radio_delta": ("0", "0", "4"),
+    "cmd_radio_echo": ("0", "0", "5"),
+    "cmd_radio_foxtrot": ("0", "0", "6"),
+    "cmd_radio_golf": ("0", "0", "7"),
+    "cmd_radio_hotel": ("0", "0", "8"),
+    "cmd_radio_india": ("0", "0", "9"),
+    "cmd_radio_juliet": ("0", "0", "0"),
 }
 
 # print key bindings
@@ -291,6 +302,15 @@ map_all_command = {
     "おうたい [(たいけい | ふぉーめーしょん)]": "cmd_form_line",
     "いちれつ [(たいけい | じゅうたい | ふぉーめーしょん)]": "cmd_form_file",
     "(だいやもんど | だいやもんど) [(たいけい | ふぉーめーしょん)]": "cmd_form_diamond",
+
+    "てっこう だん [そうてん]": "cmd_radio_alpha",
+    "だんしゅ (てっこう | てっこう だん)": "cmd_radio_alpha",
+    "(A P だん | えー ぴー だん) [そうてん]": "cmd_radio_alpha",
+    "だんしゅ (A P | A P だん | えー ぴー | えー ぴー だん)": "cmd_radio_alpha",
+    "(りゅうだん | りゅう だん) [そうてん]": "cmd_radio_bravo",
+    "だんしゅ (りゅうだん | りゅう だん)": "cmd_radio_bravo",
+    "(H E だん | えいち いー だん) [そうてん]": "cmd_radio_bravo",
+    "だんしゅ (H E | H E だん | えいち いー | えいち いー だん)": "cmd_radio_bravo",
 }
 
 def debug_print_key(input_key):
