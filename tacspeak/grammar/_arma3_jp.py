@@ -59,7 +59,8 @@ DEBUG_NOCMD_PRINT_ONLY = DEBUG_MODE
 
 # the minimum time between keys state changes (e.g. pressed then released),
 # it's to make sure key presses are registered in-game
-min_delay = 3.3  # 100/(30 fps) = 3.3 (/100 seconds between frames)
+# min_delay = 3.3  # 100/(30 fps) = 3.3 (/100 seconds between frames)
+min_delay = 5
 
 # map of action to in-game key bindings
 # https://dragonfly.readthedocs.io/en/latest/actions.html#key-names
@@ -101,58 +102,60 @@ ingame_key_bindings = {
     "menu_9": ("9",),
     "menu_10": ("0",),
 
-    "cmd_vehicle_fire": ("com_ctrl", "mouse_left"),
+    "cmd_vehicle_fire": ("com_ctrl", "mouse_left",),
     "cmd_vehicle_target": ("com_ctrl", "t",),
     "cmd_vehicle_switch_weapon": ("com_ctrl", "f",),
     "cmd_vehicle_manual_fire": ("colon",),
+    "cmd_vehicle_fast": ("e",),
+    "cmd_vehicle_slow": ("q",),
 
-    "cmd_formup": ("1", "1"),
-    "cmd_advance": ("1", "2"),
-    "cmd_fallback": ("1", "3"),
-    "cmd_flankleft": ("1", "4"),
-    "cmd_flankright": ("1", "5"),
-    "cmd_stop": ("1", "6"),
-    "cmd_takecover": ("1", "7"),
-    "cmd_notarget": ("2", "1"),
-    "cmd_openfire": ("3", "1"),
-    "cmd_holdfire": ("3", "2"),
-    "cmd_infantryfire": ("3", "3"),
-    "cmd_engage": ("3", "4"),
-    "cmd_engagefree": ("3", "5"),
-    "cmd_disengage": ("3", "6"),
-    "cmd_scanhorizon": ("3", "7"),
-    "cmd_spfire": ("3", "9"),
-    "cmd_disembark": ("4", "1"),
-    "cmd_injured": ("5", "4"),
-    "cmd_reportstatus": ("5", "5"),
-    "cmd_stealth": ("7", "1"),
-    "cmd_combat": ("7", "2"),
-    "cmd_aware": ("7", "3"),
-    "cmd_safe": ("7", "4"),
-    "cmd_standup": ("7", "6"),
-    "cmd_crouch": ("7", "7"),
-    "cmd_prone": ("7", "8"),
-    "cmd_autostance": ("7", "9"),
-    "cmd_form_column": ("8", "1"),
-    "cmd_form_staggeredcol": ("8", "2"),
-    "cmd_form_wedge": ("8", "3"),
-    "cmd_form_echelonleft": ("8", "4"),
-    "cmd_form_echelonright": ("8", "5"),
-    "cmd_form_vee": ("8", "6"),
-    "cmd_form_line": ("8", "7"),
-    "cmd_form_file": ("8", "8"),
-    "cmd_form_diamond": ("8", "9"),
+    "cmd_formup": ("1", "1",),
+    "cmd_advance": ("1", "2",),
+    "cmd_fallback": ("1", "3",),
+    "cmd_flankleft": ("1", "4",),
+    "cmd_flankright": ("1", "5",),
+    "cmd_stop": ("1", "6",),
+    "cmd_takecover": ("1", "7",),
+    "cmd_notarget": ("2", "1",),
+    "cmd_openfire": ("3", "1",),
+    "cmd_holdfire": ("3", "2",),
+    "cmd_infantryfire": ("3", "3",),
+    "cmd_engage": ("3", "4",),
+    "cmd_engagefree": ("3", "5",),
+    "cmd_disengage": ("3", "6",),
+    "cmd_scanhorizon": ("3", "7",),
+    "cmd_spfire": ("3", "9",),
+    "cmd_disembark": ("4", "1",),
+    "cmd_injured": ("5", "4",),
+    "cmd_reportstatus": ("5", "5",),
+    "cmd_stealth": ("7", "1",),
+    "cmd_combat": ("7", "2",),
+    "cmd_aware": ("7", "3",),
+    "cmd_safe": ("7", "4",),
+    "cmd_standup": ("7", "6",),
+    "cmd_crouch": ("7", "7",),
+    "cmd_prone": ("7", "8",),
+    "cmd_autostance": ("7", "9",),
+    "cmd_form_column": ("8", "1",),
+    "cmd_form_staggeredcol": ("8", "2",),
+    "cmd_form_wedge": ("8", "3",),
+    "cmd_form_echelonleft": ("8", "4",),
+    "cmd_form_echelonright": ("8", "5",),
+    "cmd_form_vee": ("8", "6",),
+    "cmd_form_line": ("8", "7",),
+    "cmd_form_file": ("8", "8",),
+    "cmd_form_diamond": ("8", "9",),
 
-    "cmd_radio_alpha": ("0", "0", "1"),
-    "cmd_radio_bravo": ("0", "0", "2"),
-    "cmd_radio_charlie": ("0", "0", "3"),
-    "cmd_radio_delta": ("0", "0", "4"),
-    "cmd_radio_echo": ("0", "0", "5"),
-    "cmd_radio_foxtrot": ("0", "0", "6"),
-    "cmd_radio_golf": ("0", "0", "7"),
-    "cmd_radio_hotel": ("0", "0", "8"),
-    "cmd_radio_india": ("0", "0", "9"),
-    "cmd_radio_juliet": ("0", "0", "0"),
+    "cmd_radio_alpha": ("0", "0", "1",),
+    "cmd_radio_bravo": ("0", "0", "2",),
+    "cmd_radio_charlie": ("0", "0", "3",),
+    "cmd_radio_delta": ("0", "0", "4",),
+    "cmd_radio_echo": ("0", "0", "5",),
+    "cmd_radio_foxtrot": ("0", "0", "6",),
+    "cmd_radio_golf": ("0", "0", "7",),
+    "cmd_radio_hotel": ("0", "0", "8",),
+    "cmd_radio_india": ("0", "0", "9",),
+    "cmd_radio_juliet": ("0", "0", "0",),
 }
 
 # print key bindings
@@ -230,13 +233,18 @@ map_all_command = {
 
     "target": "cmd_vehicle_target",
     "たーげっと [(だ | せってい)]": "cmd_vehicle_target",
-    "もくひょう [(だ | せってい)]": "cmd_vehicle_target",
+    "もくひょう [だ]": "cmd_vehicle_target",
+    "もくひょう [に] (してい | せってい)": "cmd_vehicle_target",
     "ねらえ": "cmd_vehicle_target",
     "fire": "cmd_vehicle_fire",
     "ふぁいあ": "cmd_vehicle_fire",
     "ふぁいや": "cmd_vehicle_fire",
-    "うて": "cmd_vehicle_fire",
-    "はっしゃ": "cmd_vehicle_fire",
+    "[つづけ て] うて": "cmd_vehicle_fire",
+    "[つづけ て] うで": "cmd_vehicle_fire",
+    "[つづけ て] うけ": "cmd_vehicle_fire",
+    "[つづけ て] いて": "cmd_vehicle_fire",
+    "[つづけ て] れて": "cmd_vehicle_fire",
+    "[つづけ て] はっしゃ": "cmd_vehicle_fire",
     "(ぶそう | へいそう) [(きりかえ | へんこう)]": "cmd_vehicle_switch_weapon",
     "manual": "cmd_vehicle_manual_fire",
     "manual fire": "cmd_vehicle_manual_fire",
@@ -246,6 +254,8 @@ map_all_command = {
     "まにゅある ふぁいや": "cmd_vehicle_manual_fire",
     "きゃんせる まにゅある ふぁいあ": "cmd_vehicle_manual_fire",
     "きゃんせる まにゅある ふぁいや": "cmd_vehicle_manual_fire",
+    "ぜんそく [りょく]": "cmd_vehicle_fast",
+    "ていそく": "cmd_vehicle_slow",
 
     "あつま れ": "cmd_formup",
     "しゅうけつ [(しろ | せよ)]": "cmd_formup",
@@ -254,12 +264,14 @@ map_all_command = {
     "たいけい に もどれ": "cmd_formup",
     "ついて こい": "cmd_formup",
     "もど って こい": "cmd_formup",
-    "ぜんしん [(しろ | せよ)]": "cmd_advance",
-    "こうたい [(しろ | せよ)]": "cmd_fallback",
+    # "ぜんしん [(しろ | せよ)]": "cmd_advance", # changed to use for vehicle control but, it's your option.
+    # "こうたい [(しろ | せよ)]": "cmd_fallback", # changed to use for vehicle control but, it's your option.
     "さよく に てんかい [(しろ | せよ)]": "cmd_flankleft",
+    "ひだり [がわ] に てんかい [(しろ | せよ)]": "cmd_flankleft",
     "うよく に てんかい [(しろ | せよ)]": "cmd_flankright",
+    "みぎ [がわ] に てんかい [(しろ | せよ)]": "cmd_flankright",
     "とまれ": "cmd_stop",
-    "ていし [しろ]": "cmd_stop",
+    # "ていし [しろ]": "cmd_stop", # changed to use for vehicle control but, it's your option.
     "かくれ ろ": "cmd_takecover",
     "かばー [を とれ]": "cmd_takecover",
     "もくひょう なし": "cmd_notarget",
@@ -305,12 +317,33 @@ map_all_command = {
 
     "てっこう だん [そうてん]": "cmd_radio_alpha",
     "だんしゅ (てっこう | てっこう だん)": "cmd_radio_alpha",
+    "じだん (てっこう | てっこう だん)": "cmd_radio_alpha",
     "(A P だん | えー ぴー だん) [そうてん]": "cmd_radio_alpha",
     "だんしゅ (A P | A P だん | えー ぴー | えー ぴー だん)": "cmd_radio_alpha",
+    "じだん (A P | A P だん | えー ぴー | えー ぴー だん)": "cmd_radio_alpha",
     "(りゅうだん | りゅう だん) [そうてん]": "cmd_radio_bravo",
     "だんしゅ (りゅうだん | りゅう だん)": "cmd_radio_bravo",
+    "じだん (りゅうだん | りゅう だん)": "cmd_radio_bravo",
     "(H E だん | えいち いー だん) [そうてん]": "cmd_radio_bravo",
     "だんしゅ (H E | H E だん | えいち いー | えいち いー だん)": "cmd_radio_bravo",
+    "じだん (H E | H E だん | えいち いー | えいち いー だん)": "cmd_radio_bravo",
+
+    "[つづけ て] [せんしゃ] ぜんしん [しろ | せよ | だ]": "cmd_radio_charlie",
+    "[つづけ て] [せんしゃ] すすめ": "cmd_radio_charlie",
+    "[つづけ て] [せんしゃ] ちょくしん [しろ | せよ | だ]": "cmd_radio_charlie",
+    "[つづけ て] [せんしゃ] こうたい [しろ | せよ | だ]": "cmd_radio_delta",
+    "[つづけ て] [せんしゃ] こうしん [しろ | せよ | だ]": "cmd_radio_delta",
+    "[つづけ て] [せんしゃ] さがれ": "cmd_radio_delta",
+    "[つづけ て] [せんしゃ] ていし [しろ | せよ | だ]": "cmd_radio_echo",
+    "[つづけ て] [せんしゃ] ていしゃ [しろ | せよ | だ]": "cmd_radio_echo",
+    "つづけ て [せんしゃ] とまれ": "cmd_radio_echo",
+    # "[せんしゃ] とまれ": "cmd_radio_echo", # use for infantry command
+    "[つづけ て] [せんしゃ] ひだりせんかい [しろ | せよ | だ]": "cmd_radio_foxtrot",
+    "[つづけ て] [せんしゃ] ひだり せんかい [しろ | せよ | だ]": "cmd_radio_foxtrot",
+    "[つづけ て] [せんしゃ] ひだり に (せんかい [しろ | せよ | だ] | まわれ)": "cmd_radio_foxtrot",
+    "[つづけ て] [せんしゃ] みぎせんかい [しろ | せよ | だ]": "cmd_radio_golf",
+    "[つづけ て] [せんしゃ] みぎ せんかい [しろ | せよ | だ]": "cmd_radio_golf",
+    "[つづけ て] [せんしゃ] みぎ に (せんかい [しろ | せよ | だ] | まわれ)": "cmd_radio_golf",
 }
 
 def debug_print_key(input_key):
@@ -324,16 +357,16 @@ def convert_input_action(input_key, hold=""):
             if hold == "down":
                 return Mouse(f'{input_key.replace("mouse_", "")}:down/{min_delay}')
             elif hold == "up":
-                return Mouse(f'{input_key.replace("mouse_", "")}:up')
+                return Mouse(f'{input_key.replace("mouse_", "")}:up/{min_delay}')
             else:
-                return Mouse(f'{input_key.replace("mouse_", "")}:down/{min_delay}, {input_key.replace("mouse_", "")}:up')
+                return Mouse(f'{input_key.replace("mouse_", "")}:down/{min_delay}, {input_key.replace("mouse_", "")}:up/{min_delay}')
         else:
             if hold == "down":
                 return Key(f'{input_key}:down/{min_delay}')
             elif hold == "up":
-                return Key(f'{input_key}:up')
+                return Key(f'{input_key}:up/{min_delay}')
             else:
-                return Key(f'{input_key}:down/{min_delay}, {input_key}:up')
+                return Key(f'{input_key}:down/{min_delay}, {input_key}:up/{min_delay}')
 
 # ---------------------------------------------------------------------------
 # Rules which will be added to our grammar
