@@ -109,8 +109,12 @@ def main():
     def on_begin():
         pass
 
-    def on_recognition(words):
-        log_recognition.log(20, words)
+    def on_recognition(words, results):
+        result_text = ""
+        for i, w in enumerate(words):
+            result_text = result_text + results.PhraseInfo.Elements.Item(i).DisplayText + ", "
+        # log_recognition.log(20, words)
+        log_recognition.log(20, result_text)
 
     def on_failure():
         pass
