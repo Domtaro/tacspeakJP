@@ -83,7 +83,7 @@ def main():
     # Set any configuration options here as keyword arguments.
     # if DEBUG_MODE:
     if False:
-        engine = get_engine('sapi5inproc', retain_dir="./retain/")
+        engine = get_engine('sapi5inproc', retain_dir="./retain/") # SAPI5 retain seems broken
     else:
         engine = get_engine('sapi5inproc')
 
@@ -112,7 +112,7 @@ def main():
     def on_recognition(words, results):
         result_text = ""
         for i, w in enumerate(words):
-            result_text = result_text + results.PhraseInfo.Elements.Item(i).DisplayText + ", "
+            result_text = " ".join((result_text, results.PhraseInfo.Elements.Item(i).DisplayText))
         # log_recognition.log(20, words)
         log_recognition.log(20, result_text)
 
