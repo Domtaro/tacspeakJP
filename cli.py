@@ -15,6 +15,9 @@ from multiprocessing import freeze_support
 # import win32com
 from win32com.server import util
 
+# import keyboard, mouse for push to talk
+import keyboard, mouse
+
 def main():
     print(f"TacspeakJP version {tacspeak.__version__}")
     print_notices()
@@ -23,12 +26,29 @@ def main():
     parser.add_argument('--get_audio_sources', action='store_true',
                         help=('see a list of available input devices and their corresponding indexes and names.' 
                                 + ' useful for setting `WSR_AUDIO_SOURCE_INDEX` in ./tacspeak/user_settings.py'))
+    parser.add_argument('--get_key_name', action='store_true',
+                        help=('check a key name you pressed.' 
+                                + ' useful for setting `PTT_KEY` in ./tacspeak/user_settings.py'))
     args = parser.parse_args()
     if args.get_audio_sources:
         engine = get_engine('sapi5inproc')
         engine.connect()
         print(engine.get_audio_sources())
         input("Press enter key to exit.")
+        return
+    if args.get_key_name:
+        print("press any keys which you want to check key name.")
+        print("input ctrl + c to exit.")
+        def on_press_kb(event):
+            print(event.name)
+        keyboard.on_press(on_press_kb)
+        def on_press_mb(event):
+            if isinstance(event, mouse.ButtonEvent):
+                if event.event_type == "down": print(event.button)
+        mouse.hook(on_press_mb)
+        keyboard.wait(hotkey="ctrl+c", suppress=False, trigger_on_release=False)
+        keyboard.unhook_all_hotkeys()
+        mouse.unhook_all()
         return
     tacspeak_main()
 

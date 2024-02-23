@@ -14,6 +14,8 @@ import os
 import re
 import copy
 
+import keyboard, mouse
+
 # ---------------------------------------------------------------------------
 # Check DEBUG_MODE (from user_settings)
 
@@ -1450,6 +1452,130 @@ if USE_NOISE_SINK:
 
 grammar.load()
 grammar_priority.load()
+
+# ---------------------------------------------------------------------------
+# Push to talk, mute, toggle
+
+try:
+    PTT_MODE = (sys.modules["user_settings"]).PTT_MODE
+except Exception:
+    print("Failed to get PTT_MODE, set to default mode 0 (always on)")
+    PTT_MODE = 0
+try:
+    PTT_KEY = (sys.modules["user_settings"]).PTT_KEY
+except Exception:
+    PTT_KEY = None
+
+class ListeningState(object):
+    def __init__(self, init_state):
+        self._state = init_state
+    def get_state(self):
+        return self._state
+    def set_state(self, new_state):
+        self._state = new_state
+
+grammars = (grammar, grammar_priority)
+label_mic_on = "Mic ON"
+label_mic_off = "Mic OFF"
+
+def setup_always_on():
+    print("Mic is always ON.")
+
+def setup_toggle_to_talk_mute(grammars, key=PTT_KEY, init_state=True):
+    listening_status = ListeningState(init_state)
+    def on_press(_cls, grammars):
+        _new_state = not bool(_cls.get_state())
+        if _new_state:
+            for grm in grammars: grm.engine.activate_grammar(grm)
+            print(label_mic_on)
+        else:
+            for grm in grammars: grm.engine.deactivate_grammar(grm)
+            print(label_mic_off)
+        _cls.set_state(_new_state)
+    if "mouse_" in key:
+        mouse.on_button(on_press, args=(listening_status, grammars), buttons=(key.replace("mouse_", ""),), types=("down",))
+    else:
+        keyboard.add_hotkey(keyboard.parse_hotkey(key), on_press, args=[listening_status, grammars])
+    print(f"Mic mode is 'push to toggle ON/OFF' with key={key}")
+    if init_state:
+        print(label_mic_on)
+    else:
+        for grm in grammars: grm.engine.deactivate_grammar(grm)
+        print(label_mic_off)
+
+def setup_push_to_talk_mute(grammars, key=PTT_KEY, init_state=True):
+    listening_status = ListeningState(init_state)
+    def press_down(_cls):
+        _cls = listening_status
+        _is_listening = _cls.get_state()
+        if init_state:
+            # push to mute
+            if _is_listening:
+                for grm in grammars: grm.engine.deactivate_grammar(grm)
+                _cls.set_state(False)
+                print(label_mic_off)
+        else:
+            # push to talk
+            if not _is_listening:
+                for grm in grammars: grm.engine.activate_grammar(grm)
+                _cls.set_state(True)
+                print(label_mic_on)
+    def press_up(_cls):
+        _cls = listening_status
+        if init_state:
+            # push to mute
+            for grm in grammars: grm.engine.activate_grammar(grm)
+            _cls.set_state(True)
+            print(label_mic_on)
+        else:
+            # push to talk
+            for grm in grammars: grm.engine.deactivate_grammar(grm)
+            _cls.set_state(False)
+            print(label_mic_off)
+    def push_to_talk_mute_kb(event):
+        _key = event.name
+        if keyboard.is_pressed(_key):
+            press_down(listening_status)
+        else:
+            press_up(listening_status)
+    def push_to_talk_mute_mb(event):
+        if not isinstance(event, mouse.ButtonEvent): return None
+        if not event.button == key.replace("mouse_", ""): return None
+        if event.event_type == "down":
+            press_down(listening_status)
+        elif event.event_type == "up":
+            press_up(listening_status)
+    if "mouse_" in key:
+        mouse.hook(push_to_talk_mute_mb)
+    else:
+        keyboard.hook_key(keyboard.parse_hotkey(key), push_to_talk_mute_kb)
+    if init_state:
+        print(f"Mic mode is 'push to mute' with key={key}")
+        print(label_mic_on)
+    else:
+        for grm in grammars: grm.engine.deactivate_grammar(grm)
+        print(f"Mic mode is 'push to talk' with key={key}")
+        print(label_mic_off)
+
+if PTT_MODE in (0,1,2,3,4):
+    if PTT_MODE == 0:
+        # always on
+        setup_always_on()
+    elif PTT_MODE == 1:
+        # toggle, initial on
+        setup_toggle_to_talk_mute(grammars, key=PTT_KEY, init_state=True)
+    elif PTT_MODE == 2:
+        # toggle, initial off
+        setup_toggle_to_talk_mute(grammars, key=PTT_KEY, init_state=False)
+    elif PTT_MODE == 3:
+        # push to talk
+        setup_push_to_talk_mute(grammars, key=PTT_KEY, init_state=False)
+    elif PTT_MODE == 4:
+        # push to mute
+        setup_push_to_talk_mute(grammars, key=PTT_KEY, init_state=True)
+else:
+    print("Invalid PTT_MODE was given, set to default mode 0 (always on)")
+    setup_always_on()
 
 # ---------------------------------------------------------------------------
 if DEBUG_MODE:
