@@ -6,20 +6,20 @@
 ## はじめに | Introduction  
 
 「TacspeakJP」は、[jwebmeister](https://github.com/jwebmeister)氏制作のゲーム向け音声コマンディングツール「[Tacspeak](https://github.com/jwebmeister/tacspeak)」を、日本語音声入力に対応するように改修したものです。  
-
 'TacspeakJP' is modified edition of 'Tacspeak' tool created by jwebmeister. It provide Japanese language speach recognition.  
 
 サンプルとして、Ready or Notで使用している様子がこちらで見れます。  
+You can watch a demo-play video below.
 
 [![Ready or Notで使用するデモプレイYoutubeビデオ](http://img.youtube.com/vi/orJuWn9rZoc/maxresdefault.jpg)](https://youtu.be/orJuWn9rZoc)  
-
----
 
 オリジナルのTacspeakは、カスタマイズされた [jwebmeister/dragonfly](https://github.com/jwebmeister/dragonfly) 音声認識フレームワークと、 動的デコードを実現する [Kaldi Active Grammar](https://github.com/daanzu/kaldi-active-grammar/) エンジンによって、優れた認識精度や応答性を実現しています。  
 一方で、Kaldiエンジンを使用する都合上、英語での音声認識しか利用できないという制限があります。  
 
 TacspeakJPは、日本語でTacspeakを使用できることを目標とし、使用する音声認識エンジンを'Kaldi'から'WSR / SAPI 5' (Windows Speech Recognition / Microsoft’s Speech API version 5)へと変更する改修を行いました。  
 'JP'と銘打っていますが、理論上、Windows音声認識で利用できる言語であればgrammarを用意すれば日本語以外でも動作可能なはずです。  
+
+---
 
 Original Tacspeak provides excellent response and high-accuracy recognition powered by modified Dragonfly and Kaldi Active Grammar.  
 But that only use for English recognition due to limitation of Kaldi engine.  
@@ -31,21 +31,28 @@ I named 'JP' but, I guess it can works for any other languages what is supported
 ## オリジナル版との違い | Differences from original Tacspeak  
 
 - 改変されていない [Dragonfly](https://github.com/dictation-toolbox/dragonfly) を使用  
-  Running on the original (not modified) Dragonfly.  
 - 'Kaldi'エンジンの代わりに'WSR / SAPI 5'エンジンを使用  
-  Running on the 'WSR / SAPI 5' engine insteed 'Kaldi'  
 - 日本語用に編集したReady or Not向けgrammarを同梱  
-  Includes grammar edited for Japanese language, to use on Ready or Not.  
 - エンジン変更により、次の機能は使用できません。  
-  Below features is omitted due to change the engine.  
-    - 発話中の割込み認識（エールの優先認識） | Mid-utterance recognition (for yell)  
-    - 実行中のキー操作による認識中断／再開（常にオン） | Toggle of recognition on/off (always on)  
-    - その他 user_setting.py の KALDI_ENGINE_SETTINGS で設定されていた機能 | and the other options in KALDI_ENGINE_SETTINGS on user_setting.py  
+    - 発話中の割込み認識（エールの優先認識）
+    - ~~実行中のキー操作による認識中断／再開（常にオン）~~  
+      →v2024.2.3 から実装しました。
+    - その他 user_setting.py の KALDI_ENGINE_SETTINGS で設定されていた機能
 - 認識精度はWindows音声認識の精度に依存します。これはトレーニングによって向上されます。  
-  Accuracy of recognition depends on Windows Speech Recognition. It can be improved by training.  
 - Windows音声認識の'音声辞書'機能により、特定の単語の認識精度を高めることができます。  
-  And also can improve recognition of specific words, by using 'Speech Dictionary' within WSR.  
 
+---
+
+- Running on the original (not modified) Dragonfly.
+- Running on the 'WSR / SAPI 5' engine insteed 'Kaldi'
+- Includes grammar edited for Japanese language, to use on Ready or Not.
+- Below features is omitted due to change the engine.
+  - Mid-utterance recognition (for yell)
+  - ~~Toggle of recognition on/off (always on)~~  
+    -> added from v2024.2.3
+  - and the other options in KALDI_ENGINE_SETTINGS on user_setting.py
+- Accuracy of recognition depends on Windows Speech Recognition. It can be improved by training.
+- And also can improve recognition of specific words, by using 'Speech Dictionary' within WSR.
 
 ## 要件 | Requirements  
 
@@ -80,9 +87,25 @@ I named 'JP' but, I guess it can works for any other languages what is supported
 
 ### ツールのセットアップ・実行  
 1. `user_settings.py` の内容を確認・編集する  
-    - WSR_AUDIO_SOURCE_INDEX で使用するマイクを指定できる。どのマイクが何番のインデックスかは、 `tacspeakJP.exe --get_audio_sources` を実行することで確認できる。  
+    - `WSR_AUDIO_SOURCE_INDEX` で使用するマイクを指定できる。どのマイクが何番のインデックスかは、 `tacspeakJP.exe --get_audio_sources` を実行することで確認できる。  
       - v2024.2.2（v0.2.0.1-jpの次）から、デフォルトでコメントアウト（指定なし）にしています。  
-      - 指定されなかった場合は、何も設定を変えません。（Windows音声認識の設定で指定したマイクのまま）  
+      - 指定されなかった場合は、何も設定を変えません。（Windows音声認識の設定で指定したマイクのまま）
+    - `PTT_MODE` でプッシュ・トゥ・トーク（特定キー押下中のみ発話検出）などの機能を有効にできる。  
+      以下のモードがある。
+      - 0 - 常にON（デフォルト）
+      - 1 - キー押下のたびにON/OFF切替（開始時ON）
+      - 2 - キー押下のたびにON/OFF切替（開始時OFF）
+      - 3 - キーを押している間だけON（プッシュ・トゥ・トーク）
+      - 4 - キーを押している間だけOFF（プッシュ・トゥ・ミュート）
+    - `PTT_KEY` で、上記 `PTT_MODE` に使用するキーを指定できる。（デフォルト`"left shift"`）  
+      キーの名前は、 `tacspeakJP.exe --get_key_name` を実行し、キーを押すことで確認できる。  
+      設定にあたって以下の点に注意すること。  
+      - マウスのボタンの場合、キー名の先頭に `"mouse_"` をつける。（例：`"mouse_right"`, `"mouse_x2"`）  
+      - テンキーのキーの場合、キー名の先頭に `"num "` をつける。（例：`"num 0"`, `"num enter"`）  
+        ※つけなかった場合、キーボード本配列のキーでも反応してしまう。  
+      - TacspeakJP自体のキー入力にも反応するので考慮すること。  
+        例：`"mouse_middle"` を設定し、命令開始のキーも`"mouse_middle"`だと、命令発動時にPTTも押されてしまう
+      - マウスのボタンは、連続で押下したときに反応しづらいため非推奨。
 2. grammar（ルール） の内容を確認・編集する（Ready or Notの場合、デフォルト用として `tacspeak/grammar/_readyornot_jp.py` を同梱）  
    ### よく分からない場合は、いったん触らずにそのまま使ってみてください。  
     - `grammar_context` にフックするゲームのexeのパス（の一部）を指定する（大文字／小文字区別なし）。  
@@ -103,13 +126,19 @@ I named 'JP' but, I guess it can works for any other languages what is supported
 5. 使い終わったら、Ctrl+C または 右上×で終了する  
 
 ### **【注意！】**  
-`./tacspeak/user_settings.py` と `./tacspeak/grammar/_*.py` は自動で読み込まれます。  
+- `./tacspeak/user_settings.py` と `./tacspeak/grammar/_*.py` は自動で読み込まれます。  
 信頼できない第三者のファイルが混入し実行されないように注意してください。  
-
+- TacspeakJP（および本家Tacspeak）は、キーボード入力やマウス入力をTacspeakJPが代行入力することによって動作します。  
+  ### このような動作は、ゲーム内のチート検出機能や、ゲームと一緒に動作するチート検出ソフトウェアにチート使用として検出される可能性があります。  
+  そのため、TacspeakJPをそのようなチート検出の仕組みを持つゲームや、対人対戦のあるゲーム、オンラインランキング・スコアボードのあるゲーム、ランクマッチのあるゲーム、そのほか他のユーザーやゲームサービス提供者に不正行為と誤認されうる環境で使用することは推奨しません。  
+  また当然、ゲームルール上禁止されている不正行為を意図的に行うために使用することは許されません。  
+  ### TacspeakJPの制作者およびプロジェクト管理主体は、TacspeakJPを使用することによって発生した、上記のチート検出を含むあらゆる損害（アカウント停止など）について一切責任を負いません。  
+  ※2024年2月時点で、実際にTacspeak（およびJP）の使用がチートとして検出された事例は報告されていません。
 
 ## 基本的な使い方（Ready or Notで説明） | Basic usage (in Japanese only)  
 
-- 言葉をしゃべり、コマンドが成立した場合、「current team go stack up split」のように認識されたコマンドが表示され、キー入力が行われます。  
+- プッシュ・トゥ・トークを有効にしている場合、`Mic ON` と表示されている状態のあいだ発話を受け付けます。  
+- 言葉を喋り、コマンドが成立すると、「current team go stack up split」のように認識されたコマンドが表示され、キー入力が行われます。  
 - 使えるアクション（コマンド）と、それに対応する言葉は、デバッグモードを使って確認できます。  
   ### 以下の手順で確認できるほか、あらかじめ付属の「Ready or Not用デフォルトgrammar」で出力したものを `sample_grammar_readyornot.txt` として同梱しています。  
   1. 「トラブルシューティング」の項目を参考に、デバッグモードを有効にしてTacspeakJPを起動してください。
@@ -168,6 +197,7 @@ I named 'JP' but, I guess it can works for any other languages what is supported
 
 ## トラブルシューティング | Troubleshooting (in Japanese only)  
 
+- 以下の内容のほか、 [トラブル調査チャート](https://github.com/Domtaro/tacspeakJP/discussions/14) の内容も参考にしてみてください。
 - 言葉がうまく認識されない  
     - Windows音声認識のトレーニングを実行してみてください。  
     - 一般的でない単語（ミラーガンなど）については音声辞書に登録してください。  
@@ -197,7 +227,7 @@ I named 'JP' but, I guess it can works for any other languages what is supported
 - そのほかの制限  
     - 視線の手前と奥に二つドアがある場合、どちらのドアへの指示かを決める入力が先頭に追加されますが、付属のgrammarではそのパターンに対応していません。  
       しかし、あなたの手で改良すれば対応可能かもしれません。  
-      本家Tacspeakでも[その件に関する議論](https://github.com/jwebmeister/tacspeak/issues/15)がありました（未解決）。参考にしてみてください。  
+      本家Tacspeakでも [その件に関する議論](https://github.com/jwebmeister/tacspeak/issues/15) がありました（未解決）。参考にしてみてください。  
 
 
 ## （開発者向け）ビルド方法 | How to build (for deveropper, in Japanese only)  
@@ -211,7 +241,7 @@ I named 'JP' but, I guess it can works for any other languages what is supported
       他にもあったかもしれないけど忘れてしまった  
 - ビルド手順  
     - `setup.py` のディレクトリでpowershellを開く  
-    - `py -m venv "./.venv"`  
+    - `py -3.11 -m venv "./.venv"`  
     - `./.venv/Scripts/activate`  
     - (.venv)に切り替わっていること  
     - `py -m pip install -r requirements.txt` （前提パッケージに変更が無ければ２回目以降不要）  
@@ -231,6 +261,8 @@ I named 'JP' but, I guess it can works for any other languages what is supported
 
 改めて、オリジナルTacspeak制作者のjwebmeister氏に感謝と敬意を表します。  
 
+---
+
 'Tacspeak' is an amazing tool that provides a unique gaming experience. However, in Japan, many people does not familiarized them with native English pronaunciation.  
 Therefore, I tryed whether it would be possible to handle Japanese speech input to bring the experiences of Tacspeak to many users as possible.  
 
@@ -243,17 +275,20 @@ I would like to express my thanks and respect to jwebmeister, the author of the 
 ## ロードマップ | Roadmap  
 
 - まず、このプロジェクトは個人の趣味です。サポート内容や期間については一切お約束できないことをご了承ください。  
-  This project is personal. I can not guarantee any support, but I would to help you as I can if you need.  
 - 今のところ、プログラム本体にこれ以上変更を加える具体的な計画はありません。  
-  I have no detailed plan to change any more the main programs for now.  
 - あるとすれば、Ready or Not向け付属grammarの改良、またはオリジナルTacspeakの変更で適用すべきものの反映などを想定しています。  
-  If some changes happen on original Tacspeak, I would check if it need to be applied to my project. And also I may update the grammar contained.  
 - 何か機能を思いついたら実装するかもしれません。  
-  I may add something new if I got ideas.
 - その他、使い方などの問い合わせに適宜対応します。  
-  I will reply to your questions/comments as I can.  
 - このプロジェクトはオープンソースです。ライセンスの範囲内で誰でも自由に改変できます。私への伺い立て等も不要です。  
-  This project is open source. Anyone can modify that within license below. It's no need to notify me.  
+
+---
+
+- This project is personal. I can not guarantee any support, but I would to help you as I can if you need.
+- I have no detailed plan to change any more the main programs for now.
+- If some changes happen on original Tacspeak, I would check if it need to be applied to my project. And also I may update the grammar contained.
+- I may add something new if I got ideas.
+- I will reply to your questions/comments as I can.
+- This project is open source. Anyone can modify that within license below. It's no need to notify me.
 
 
 ## 制作者 | Author  

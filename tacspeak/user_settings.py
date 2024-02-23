@@ -30,6 +30,6 @@ PTT_MODE = 0
 # You can check keys name which you want to know by:
 #     tacspeakJP.exe --get_key_name
 # You can identify numpad keys with 'num' e.g. 'num 0', 'num enter'
-# You can identify mouse button with 'mouse_' e.g. 'mouse_middle', 'mouse_x2'
+# You can identify mouse button with 'mouse_' e.g. 'mouse_right', 'mouse_x2'
 # Inputs from Tacspeak command is also detected. Pay attension like 1,2,3... or mouse_middle
 PTT_KEY = "left shift"

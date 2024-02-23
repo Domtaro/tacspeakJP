@@ -14,8 +14,6 @@ import os
 import re
 import copy
 
-import keyboard, mouse
-
 # ---------------------------------------------------------------------------
 # Check DEBUG_MODE (from user_settings)
 
@@ -1455,6 +1453,8 @@ grammar_priority.load()
 
 # ---------------------------------------------------------------------------
 # Push to talk, mute, toggle
+
+import keyboard, mouse
 
 try:
     PTT_MODE = (sys.modules["user_settings"]).PTT_MODE
