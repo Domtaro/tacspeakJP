@@ -67,6 +67,7 @@ include_files = []
 include_files.extend(grammar_modules())
 include_files.append(("tacspeak/user_settings.py", "tacspeak/user_settings.py"))
 include_files.append(("tacspeak/grammar/originalTacspeak_readyornot.py", "tacspeak/grammar/originalTacspeak_readyornot.py"))
+include_files.append(("tacspeak/grammar/sample_arma3_jp.py", "tacspeak/grammar/sample_arma3_jp.py"))
 include_files.append(("sample_grammar_readyornot.txt", "sample_grammar_readyornot.txt"))
 include_files.append("README.md")
 include_files.append("LICENSE.txt")
