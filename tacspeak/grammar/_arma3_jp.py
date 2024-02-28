@@ -176,6 +176,7 @@ ingame_key_bindings = {
     "cmd_mod_vehicle_mv_left_keep": ("com_rctrl", "z",),
     "cmd_mod_vehicle_mv_right": ("com_rctrl", "d",),
     "cmd_mod_vehicle_mv_right_keep": ("com_rctrl", "c",),
+    "cmd_mod_vehicle_mv_headto": ("com_rctrl", "alt",),
 }
 
 # print key bindings
@@ -425,6 +426,9 @@ map_all_command = {
     "[つづけ て] [せんしゃ] みぎせんかい [しろ | せよ | だ]": "cmd_mod_vehicle_mv_right_keep",
     "[つづけ て] [せんしゃ] みぎ せんかい [しろ | せよ | だ]": "cmd_mod_vehicle_mv_right_keep",
     "[つづけ て] [せんしゃ] みぎ に (せんかい [しろ | せよ | だ] | まわれ)": "cmd_mod_vehicle_mv_right_keep",
+    "[つづけ て] [せんしゃ] (あっち | こっち | そっち | あちら | こちら | そちら) [を] むけ": "cmd_mod_vehicle_mv_headto",
+    "[つづけ て] [せんしゃ] [(あっち | こっち | そっち | あちら | こちら | そちら)] [に] せんかい [しろ]": "cmd_mod_vehicle_mv_headto",
+    "[つづけ て] [せんしゃ] [(あっち | こっち | そっち | あちら | こちら | そちら)] [に] まわれ": "cmd_mod_vehicle_mv_headto",
 }
 
 def debug_print_key(input_key):
