@@ -2,6 +2,20 @@
 
 **日本語音声入力コマンディングツール**  
 
+## 開発終了のお知らせ | End Of Life announcement
+「TacspeakJP」は、Windows音声認識（WSR / SAPI 5）が2024年9月にサポート終了することを受け、2024年6月で開発を終了します。  
+
+後継として、新たに「[SR2Control](https://github.com/Domtaro/SR2Control)」というツールを開発・公開しているため、今後はこちらの利用をご検討ください。  
+
+そのほか、詳細は[こちら](https://github.com/Domtaro/tacspeakJP/discussions/15)を参照ください。  
+
+---
+
+'TacspeakJP' project has been EOL(End Of Life) on June 2024. Due to 'WSR / SAPI 5' has EOL on September 2024.
+
+And now, '[SR2Control](https://github.com/Domtaro/SR2Control)' is available as next project.
+
+The details about EOL is [here](https://github.com/Domtaro/tacspeakJP/discussions/15).
 
 ## はじめに | Introduction  
 
